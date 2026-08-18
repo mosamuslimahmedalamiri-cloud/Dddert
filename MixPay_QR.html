@@ -1,2009 +1,260 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>MixPay - ميكس باي</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MixPay - لا يوجد اتصال</title>
 
 <style>
-/* ==============================================
-   MixPay - Design System
-   ============================================== */
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Cairo:wght@400;500;600;700&display=swap');
-
-:root {
-  --bg: #0E0F1A;
-  --bg-elevated: #171826;
-  --surface: #1E2033;
-  --surface-2: #262A42;
-  --ink: #12131A;
-  --mix-violet: #7B6CF6;
-  --mix-teal: #3FD6C6;
-  --gold: #E8B45C;
-  --text-primary: #F3F2F8;
-  --text-secondary: #9C9DB8;
-  --text-muted: #6A6C89;
-  --success: #3FD6C6;
-  --danger: #F26D6D;
-  --grad-mix: linear-gradient(135deg, var(--mix-violet) 0%, var(--mix-teal) 100%);
-  --font-display: 'Tajawal', 'Cairo', sans-serif;
-  --font-body: 'Cairo', 'Tajawal', sans-serif;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --nav-height: 80px;
-  --shadow-card: 0 8px 30px rgba(0,0,0,0.35);
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body {
-  direction: rtl; background: var(--bg); color: var(--text-primary);
-  font-family: var(--font-body); min-height: 100vh; -webkit-tap-highlight-color: transparent;
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: system-ui, -apple-system, sans-serif;
+    background:
+        radial-gradient(circle at top, #123b57 0%, transparent 45%),
+        #07111f;
+    color: white;
 }
-body { padding-bottom: calc(var(--nav-height) + 16px); }
-a { text-decoration: none; color: inherit; }
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
-input { font-family: inherit; }
 
-.app-container { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; background: var(--bg); }
-
-.view { display: none; }
-.view.active { display: block; animation: fadeIn 0.25s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-.top-bar { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 8px; }
-.brand { font-family: var(--font-display); font-weight: 900; font-size: 26px; background: var(--grad-mix); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 0.5px; }
-.brand-tagline { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
-.icon-btn { width: 42px; height: 42px; border-radius: 50%; background: var(--surface); border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 18px; position: relative; overflow: hidden; isolation: isolate; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), background 0.2s ease, box-shadow 0.2s ease, border-color .2s ease; }
-.icon-btn:active { transform: scale(0.9); background: var(--surface-2); }
-.icon-btn:hover { border-color: rgba(123,108,246,0.35); box-shadow: 0 6px 18px rgba(123,108,246,0.22); }
-
-.wallet-card { margin: 12px 20px 20px; padding: 26px 24px; border-radius: var(--radius-lg); background: var(--grad-mix); position: relative; overflow: hidden; box-shadow: 0 18px 46px rgba(123, 108, 246, 0.32), 0 2px 0 rgba(255,255,255,0.12) inset; border: 1px solid rgba(255,255,255,0.14); }
-.wallet-card::before { content: ""; position: absolute; inset: -40% -20% auto auto; width: 220px; height: 220px; background: radial-gradient(circle, rgba(255,255,255,0.25), transparent 70%); border-radius: 50%; animation: floatBlob 8s ease-in-out infinite; }
-.wallet-card::after { content: ""; position: absolute; inset: auto auto -30% -10%; width: 180px; height: 180px; background: radial-gradient(circle, rgba(232,180,92,0.35), transparent 70%); border-radius: 50%; animation: floatBlob 10s ease-in-out infinite reverse; }
-.wallet-card .card-shine { content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%; background: linear-gradient(115deg, transparent, rgba(255,255,255,0.16), transparent); transform: skewX(-18deg); animation: shineSweep 5.5s ease-in-out infinite; pointer-events: none; }
-@keyframes shineSweep { 0% { left: -60%; } 35%, 100% { left: 140%; } }
-@keyframes floatBlob { 0%, 100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-10px, 10px) scale(1.08); } }
-.wallet-label { font-size: 13px; opacity: 0.85; position: relative; z-index: 1; letter-spacing: .2px; }
-.wallet-balance { font-family: var(--font-display); font-weight: 900; font-size: 37px; margin: 6px 0 18px; position: relative; z-index: 1; text-shadow: 0 2px 12px rgba(0,0,0,0.15); }
-.wallet-number-row { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); backdrop-filter: blur(6px); padding: 10px 14px; border-radius: 999px; position: relative; z-index: 1; width: fit-content; border: 1px solid rgba(255,255,255,0.12); }
-.wallet-number-row span:first-child { font-size: 13px; opacity: 0.8; }
-.wallet-number { font-weight: 700; letter-spacing: 1.5px; }
-.copy-btn { font-size: 15px; opacity: 0.9; transition: transform 0.15s cubic-bezier(.34,1.56,.64,1); }
-.copy-btn:active { transform: scale(0.8) rotate(-8deg); }
-
-.quick-actions { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 0 20px; margin-bottom: 26px; }
-.quick-action { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 4px 12px; border-radius: var(--radius-md); background: var(--surface); border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; isolation: isolate; transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), background 0.2s ease, border-color .2s ease, box-shadow .25s ease; animation: qaIn .5s cubic-bezier(.2,.8,.2,1) backwards; }
-.quick-action:nth-child(1) { animation-delay: .02s; } .quick-action:nth-child(2) { animation-delay: .07s; } .quick-action:nth-child(3) { animation-delay: .12s; } .quick-action:nth-child(4) { animation-delay: .17s; } .quick-action:nth-child(5) { animation-delay: .22s; }
-@keyframes qaIn { from { opacity: 0; transform: translateY(10px) scale(.92); } to { opacity: 1; transform: translateY(0) scale(1); } }
-.quick-action:active { transform: scale(0.92) translateY(1px); }
-.quick-action:hover { border-color: rgba(255,255,255,0.12); box-shadow: 0 10px 22px rgba(0,0,0,0.3); }
-.quick-action .qa-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; background: var(--grad-mix); box-shadow: 0 6px 16px rgba(123,108,246,0.35); transition: transform .2s ease; }
-.quick-action:active .qa-icon { transform: scale(0.88); }
-.quick-action .qa-label { font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: 500; }
-.quick-action:nth-child(1) .qa-icon { background: linear-gradient(135deg,#E8B45C,#F2915C); box-shadow: 0 6px 16px rgba(232,180,92,0.35); }
-.quick-action:nth-child(2) .qa-icon { background: linear-gradient(135deg,#7B6CF6,#A084F2); box-shadow: 0 6px 16px rgba(123,108,246,0.4); }
-.quick-action:nth-child(3) .qa-icon { background: linear-gradient(135deg,#3FD6C6,#4FC1E9); box-shadow: 0 6px 16px rgba(63,214,198,0.35); }
-.quick-action:nth-child(4) .qa-icon { background: linear-gradient(135deg,#F26D9C,#F6935C); box-shadow: 0 6px 16px rgba(242,109,156,0.32); }
-.quick-action:nth-child(5) .qa-icon { background: linear-gradient(135deg,#6C7BF6,#3FD6C6); box-shadow: 0 6px 16px rgba(108,123,246,0.32); }
-
-.section-title { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; margin-bottom: 12px; }
-.section-title h3 { font-family: var(--font-display); font-size: 16px; font-weight: 700; position: relative; padding-inline-start: 12px; }
-.section-title h3::before { content: ""; position: absolute; inset-inline-start: 0; top: 3px; bottom: 3px; width: 3px; border-radius: 3px; background: var(--grad-mix); }
-.section-title a { font-size: 12px; color: var(--mix-teal); font-weight: 600; cursor: pointer; transition: opacity .2s ease; }
-.section-title a:active { opacity: .6; }
-
-.products-scroll, .products-grid { display: grid; gap: 12px; padding: 0 20px; margin-bottom: 28px; }
-.products-scroll { grid-auto-flow: column; grid-auto-columns: 140px; overflow-x: auto; padding-bottom: 6px; }
-.products-grid { grid-template-columns: 1fr 1fr; }
-.product-card { background: var(--surface); border-radius: var(--radius-md); overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.2s cubic-bezier(.34,1.4,.64,1), box-shadow .25s ease, border-color .25s ease; cursor: pointer; }
-.product-card:active { transform: scale(0.96); }
-.product-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0,0,0,0.35); border-color: rgba(232,180,92,0.25); }
-.product-card .product-img-wrap { position: relative; overflow: hidden; }
-.product-card .product-img-wrap .product-icon { width: 100%; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; font-size: 56px; background: var(--surface-2); }
-.product-card .product-img-wrap::after { content: ""; position: absolute; inset: auto 0 0 0; height: 45%; background: linear-gradient(to top, rgba(14,15,26,0.55), transparent); pointer-events: none; }
-.product-info { padding: 11px 12px 13px; }
-.product-info h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.35; }
-.product-info .product-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
-.product-price { font-size: 12.5px; color: var(--ink); font-weight: 800; background: linear-gradient(135deg, var(--gold), #F2C97C); padding: 4px 10px; border-radius: 999px; display: inline-block; box-shadow: 0 4px 10px rgba(232,180,92,0.3); }
-.product-stock { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
-
-.transactions-list { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
-.transaction-item { display: flex; align-items: center; gap: 12px; background: var(--surface); border-radius: var(--radius-md); padding: 13px 14px; border: 1px solid rgba(255,255,255,0.04); transition: transform .18s ease, border-color .2s ease, background .2s ease; }
-.transaction-item:hover { transform: translateX(-2px); border-color: rgba(255,255,255,0.1); background: var(--surface-2); }
-.tx-icon { width: 42px; height: 42px; border-radius: 50%; background: var(--surface-2); display: flex; align-items: center; justify-content: center; font-size: 17px; border: 1px solid rgba(255,255,255,0.06); }
-.tx-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
-.tx-title { font-size: 13.5px; font-weight: 600; }
-.tx-date { font-size: 11px; color: var(--text-muted); }
-.tx-amount { font-weight: 800; font-size: 14px; }
-.tx-amount.positive { color: var(--success); }
-.tx-amount.negative { color: var(--danger); }
-.transaction-item:has(.tx-amount.positive) .tx-icon { background: rgba(63,214,198,0.14); box-shadow: 0 0 0 1px rgba(63,214,198,0.18) inset; }
-.transaction-item:has(.tx-amount.negative) .tx-icon { background: rgba(242,109,109,0.12); box-shadow: 0 0 0 1px rgba(242,109,109,0.16) inset; }
-.empty-state { color: var(--text-muted); font-size: 13px; text-align: center; padding: 34px 0; }
-
-.purchases-list { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
-.purchase-item { display: flex; align-items: center; gap: 12px; background: var(--surface); border-radius: var(--radius-md); padding: 13px 14px; border: 1px solid rgba(255,255,255,0.04); }
-.purchase-item .pi-icon { width: 42px; height: 42px; border-radius: 50%; background: var(--surface-2); display: flex; align-items: center; justify-content: center; font-size: 17px; }
-.purchase-item .pi-info { flex: 1; }
-.purchase-item .pi-title { font-size: 13.5px; font-weight: 600; }
-.purchase-item .pi-sub { font-size: 11px; color: var(--text-muted); }
-.purchase-item .pi-code { font-family: monospace; font-weight: 700; font-size: 13px; color: var(--gold); letter-spacing: 1px; padding: 4px 8px; background: rgba(232,180,92,0.1); border-radius: 6px; word-break: break-all; }
-.purchase-item .pi-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
-.purchase-item .pi-status.active { color: var(--success); background: rgba(63,214,198,0.12); }
-.purchase-item .pi-status.expired { color: var(--danger); background: rgba(242,109,109,0.12); }
-.purchase-item .pi-expiry { font-size: 10px; color: var(--text-muted); }
-
-.bottom-nav { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); width: calc(100% - 24px); max-width: 456px; height: 64px; background: rgba(23,24,38,0.82); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; display: none; align-items: center; justify-content: space-around; z-index: 50; box-shadow: 0 12px 34px rgba(0,0,0,0.45); }
-.bottom-nav.active-nav { display: flex; }
-.bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-size: 10.5px; font-weight: 500; padding: 6px 10px; border-radius: 14px; position: relative; transition: color 0.25s ease, transform .2s cubic-bezier(.34,1.56,.64,1); }
-.bottom-nav a:active { transform: scale(0.9); }
-.bottom-nav a .nav-icon { font-size: 19px; transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
-.bottom-nav a.active { color: var(--mix-teal); }
-.bottom-nav a.active .nav-icon { transform: translateY(-2px) scale(1.1); }
-.bottom-nav a.active::before { content: ""; position: absolute; top: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--mix-teal); box-shadow: 0 0 8px var(--mix-teal); animation: navDot .3s ease; }
-@keyframes navDot { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
-
-.page-header { padding: 20px 20px 12px; display: flex; align-items: center; gap: 12px; }
-.page-header h2 { font-family: var(--font-display); font-size: 19px; font-weight: 700; }
-
-.form-page { padding: 20px; }
-.form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; font-weight: 600; }
-.form-group input, .form-group textarea { width: 100%; padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.08); background: var(--surface); color: var(--text-primary); font-size: 15px; outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-.form-group input:focus, .form-group textarea:focus { border-color: var(--mix-teal); box-shadow: 0 0 0 4px rgba(63,214,198,0.14); }
-.form-group input::placeholder { color: var(--text-muted); }
-
-.btn-primary { width: 100%; padding: 17px; border-radius: var(--radius-md); background: var(--grad-mix); color: #fff; font-weight: 700; font-size: 15px; text-align: center; position: relative; overflow: hidden; isolation: isolate; letter-spacing: .2px; box-shadow: 0 10px 26px rgba(123,108,246,0.35), 0 1px 0 rgba(255,255,255,0.2) inset; border: 1px solid rgba(255,255,255,0.08); transition: transform 0.16s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s ease, opacity 0.2s ease; }
-.btn-primary::before { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.28) 48%, transparent 66%); background-size: 220% 100%; background-position: 120% 0; transition: background-position .7s ease; pointer-events: none; }
-.btn-primary:hover::before { background-position: -20% 0; }
-.btn-primary:hover { box-shadow: 0 14px 32px rgba(123,108,246,0.45), 0 1px 0 rgba(255,255,255,0.2) inset; }
-.btn-primary:active { transform: scale(0.97); box-shadow: 0 6px 16px rgba(123,108,246,0.3); }
-.btn-primary:disabled { opacity: 0.5; }
-.btn-secondary { width: 100%; padding: 15px; border-radius: var(--radius-md); background: var(--surface); color: var(--text-primary); font-weight: 600; font-size: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: background 0.2s ease, border-color .2s ease, transform .16s cubic-bezier(.34,1.56,.64,1); }
-.btn-secondary:hover { border-color: rgba(255,255,255,0.18); background: var(--surface-2); }
-.btn-secondary:active { transform: scale(0.97); background: var(--surface-2); }
-
-.ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.45); transform: scale(0); animation: rippleAnim .6s ease-out forwards; pointer-events: none; }
-@keyframes rippleAnim { to { transform: scale(2.6); opacity: 0; } }
-
-.password-field { position: relative; }
-.password-field input { padding-inline-end: 46px; }
-.eye-toggle { position: absolute; top: 50%; inset-inline-end: 12px; transform: translateY(-50%); width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); border-radius: 50%; transition: color .2s ease, background .2s ease, transform .15s ease; }
-.eye-toggle:hover { color: var(--mix-teal); background: rgba(63,214,198,0.1); }
-.eye-toggle:active { transform: translateY(-50%) scale(0.85); }
-.eye-toggle svg { width: 19px; height: 19px; }
-.eye-toggle .eye-off { display: none; }
-.eye-toggle.revealed .eye-on { display: none; }
-.eye-toggle.revealed .eye-off { display: block; }
-
-.pin-card { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
-.pin-card .pin-glyph { width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, var(--mix-violet), var(--mix-teal)); display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 8px 18px rgba(123,108,246,0.32); flex-shrink: 0; }
-.pin-card .pin-text { flex: 1; }
-.pin-card .pin-title { font-size: 13.5px; font-weight: 700; }
-.pin-card .pin-dots { font-size: 12px; color: var(--text-muted); letter-spacing: 3px; margin-top: 2px; }
-.pin-edit-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--surface-2); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; transition: transform .18s cubic-bezier(.34,1.56,.64,1), background .2s ease; }
-.pin-edit-btn:active { transform: scale(0.88) rotate(-8deg); background: var(--mix-violet); }
-
-.forgot-pin-link { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 12px; border-radius: var(--radius-md); background: rgba(63,214,198,0.08); border: 1px solid rgba(63,214,198,0.18); color: var(--mix-teal); font-size: 12.5px; font-weight: 700; margin-top: 12px; transition: background .2s ease, transform .16s cubic-bezier(.34,1.56,.64,1); }
-.forgot-pin-link:active { transform: scale(0.97); background: rgba(63,214,198,0.16); }
-
-.profile-row-icon { width: 32px; height: 32px; border-radius: 10px; background: var(--surface-2); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; margin-inline-end: 8px; }
-
-.glass-card { background: rgba(30,32,51,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-lg); padding: 18px; box-shadow: 0 10px 26px rgba(0,0,0,0.25); }
-
-.balance-pulse { animation: balancePulse .6s ease; }
-@keyframes balancePulse { 0% { transform: scale(1); } 30% { transform: scale(1.06); text-shadow: 0 0 18px rgba(63,214,198,0.7); } 100% { transform: scale(1); } }
-
-.confetti-piece { position: fixed; top: -12px; z-index: 400; border-radius: 2px; pointer-events: none; animation: confettiFall linear forwards; }
-@keyframes confettiFall { to { transform: translateY(110vh) rotate(600deg); opacity: 0; } }
-
-.form-footer-link { text-align: center; font-size: 13px; color: var(--text-secondary); margin-top: 20px; }
-.form-footer-link a { color: var(--mix-teal); font-weight: 600; cursor: pointer; }
-
-.auth-hero { text-align: center; padding: 60px 20px 30px; }
-.auth-hero .brand { font-size: 40px; }
-.auth-hero .brand-tagline { font-size: 13px; margin-top: 8px; }
-
-.modal-overlay { position: fixed; inset: 0; background: rgba(5,6,12,0.7); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 100; }
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal-sheet { width: 100%; max-width: 480px; background: var(--bg-elevated); border-radius: 24px 24px 0 0; padding: 24px 20px 32px; transform: translateY(30px); transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; }
-.modal-overlay.open .modal-sheet { transform: translateY(0); }
-.modal-handle { width: 40px; height: 4px; background: var(--surface-2); border-radius: 4px; margin: 0 auto 18px; }
-.modal-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-bottom: 16px; text-align: center; }
-.confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 13.5px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-.confirm-row span:first-child { color: var(--text-secondary); display: flex; align-items: center; }
-.confirm-row.total span:last-child { color: var(--gold); font-weight: 700; }
-.success-icon { font-size: 56px; text-align: center; margin-bottom: 10px; }
-
-.toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: 8px; width: 90%; max-width: 420px; }
-.toast { padding: 14px 18px; border-radius: var(--radius-md); background: var(--surface-2); color: var(--text-primary); font-size: 13.5px; text-align: center; box-shadow: var(--shadow-card); opacity: 0; transform: translateY(-10px); transition: all 0.3s ease; border-inline-start: 4px solid var(--mix-teal); }
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast-error { border-inline-start-color: var(--danger); }
-
-.loader-overlay { position: fixed; inset: 0; background: rgba(14,15,26,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 300; }
-.loader-overlay.visible { opacity: 1; pointer-events: all; }
-.spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.15); border-top-color: var(--mix-teal); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.divider { position: relative; margin: 16px 0; text-align: center; }
-.divider hr { border: 1px solid rgba(255,255,255,0.08); }
-.divider span { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 10px; color: var(--text-muted); font-size: 12px; }
-
-/* ============ شاشة عدم الاتصال بالإنترنت ============ */
-.offline-overlay { position: fixed; inset: 0; z-index: 500; display: none; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 40px 30px; background: radial-gradient(circle at 30% 20%, rgba(123,108,246,0.14), transparent 55%), radial-gradient(circle at 80% 85%, rgba(63,214,198,0.12), transparent 55%), var(--bg); }
-.offline-overlay.visible { display: flex; }
-.offline-card { max-width: 340px; width: 100%; }
-.offline-icon-wrap { width: 96px; height: 96px; border-radius: 50%; background: var(--grad-mix); display: flex; align-items: center; justify-content: center; font-size: 42px; margin: 0 auto 22px; box-shadow: 0 18px 40px rgba(123,108,246,0.35), 0 2px 0 rgba(255,255,255,0.12) inset; position: relative; }
-.offline-icon-wrap::after { content: ""; position: absolute; inset: -10px; border-radius: 50%; border: 1px solid rgba(63,214,198,0.35); animation: offlinePulse 2.2s ease-out infinite; }
-.offline-icon-wrap::before { content: ""; position: absolute; inset: -22px; border-radius: 50%; border: 1px solid rgba(123,108,246,0.2); animation: offlinePulse 2.2s ease-out infinite .4s; }
-@keyframes offlinePulse { 0% { transform: scale(0.85); opacity: 0.8; } 100% { transform: scale(1.35); opacity: 0; } }
-.offline-title { font-family: var(--font-display); font-weight: 900; font-size: 21px; margin-bottom: 10px; }
-.offline-text { color: var(--text-secondary); font-size: 13.5px; line-height: 1.85; margin-bottom: 26px; }
-.offline-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 26px; }
-.offline-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--mix-teal); opacity: .35; animation: offlineDot 1.4s ease-in-out infinite; }
-.offline-dots span:nth-child(2) { animation-delay: .2s; }
-.offline-dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes offlineDot { 0%, 100% { opacity: .35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
-.offline-brand { font-family: var(--font-display); font-weight: 900; font-size: 22px; background: var(--grad-mix); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 30px; letter-spacing: .5px; }
-
-@media (min-width: 600px) {
-  .app-container { max-width: 600px; border-inline: 1px solid rgba(255,255,255,0.05); }
-  .bottom-nav { max-width: 600px; }
-  .products-grid { grid-template-columns: repeat(3, 1fr); }
+.card {
+    width: 100%;
+    max-width: 390px;
+    padding: 35px 25px;
+    text-align: center;
+    border-radius: 28px;
+    background: rgba(15, 30, 48, .88);
+    border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 25px 60px rgba(0,0,0,.45);
 }
-@media (min-width: 1024px) {
-  body { display: flex; justify-content: center; background: var(--ink); padding-bottom: 0; }
-  .app-container { max-width: 480px; margin: 24px 0; border-radius: 32px; overflow: hidden; min-height: calc(100vh - 48px); box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
-  .bottom-nav { position: absolute; max-width: 456px; }
+
+.logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 22px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    background: linear-gradient(135deg,#0284c7,#06b6d4);
+    box-shadow: 0 10px 30px rgba(2,132,199,.35);
 }
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+h1 {
+    font-size: 23px;
+    margin-bottom: 12px;
+}
+
+p {
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 30px;
+    background: rgba(239,68,68,.12);
+    color: #f87171;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+}
+
+button {
+    width: 100%;
+    border: 0;
+    border-radius: 14px;
+    padding: 14px;
+    color: white;
+    background: linear-gradient(135deg,#0284c7,#0369a1);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+.loading {
+    display: none;
+    margin-top: 15px;
+    color: #38bdf8;
+    font-size: 13px;
+}
 </style>
 </head>
+
 <body>
-<div class="app-container" id="appContainer">
 
-  <!-- ============ شاشة: تسجيل الدخول ============ -->
-  <section class="view active" data-view="login">
-    <div class="auth-hero">
-      <div class="brand">MixPay</div>
-      <div class="brand-tagline">اشتري • اجمع • حوّل • استبدل</div>
-    </div>
-    <form class="form-page" id="loginForm">
-      <div class="form-group">
-        <label>البريد الإلكتروني</label>
-        <input type="email" id="loginEmail" placeholder="example@mail.com" required />
-      </div>
-      <div class="form-group">
-        <label>كلمة المرور</label>
-        <div class="password-field">
-          <input type="password" id="loginPassword" placeholder="••••••••" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('loginPassword', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <button type="submit" class="btn-primary">تسجيل الدخول</button>
-      <div class="form-footer-link">
-        ليس لديك حساب؟ <a onclick="navigateTo('register')">أنشئ حسابًا جديدًا</a>
-      </div>
-    </form>
-  </section>
+<div class="card">
 
-  <!-- ============ شاشة: التسجيل ============ -->
-  <section class="view" data-view="register">
-    <div class="page-header">
-      <button class="icon-btn" onclick="navigateTo('login')">→</button>
-      <h2>إنشاء حساب جديد</h2>
-    </div>
-    <form class="form-page" id="registerForm">
-      <div class="form-group">
-        <label>الاسم الكامل</label>
-        <input type="text" id="registerName" placeholder="اسمك" required />
-      </div>
-      <div class="form-group">
-        <label>البريد الإلكتروني</label>
-        <input type="email" id="registerEmail" placeholder="example@mail.com" required />
-      </div>
-      <div class="form-group">
-        <label>كلمة المرور</label>
-        <div class="password-field">
-          <input type="password" id="registerPassword" placeholder="6 أحرف على الأقل" minlength="6" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('registerPassword', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>رمز PIN (4 إلى 6 أرقام) — لتأكيد التحويلات</label>
-        <div class="password-field">
-          <input type="password" id="registerPin" inputmode="numeric" placeholder="••••" maxlength="6" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('registerPin', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <button type="submit" class="btn-primary">إنشاء الحساب</button>
-      <div class="form-footer-link">
-        لديك حساب بالفعل؟ <a onclick="navigateTo('login')">تسجيل الدخول</a>
-      </div>
-    </form>
-  </section>
+    <div class="logo">📡</div>
 
-  <!-- ============ شاشة: الرئيسية ============ -->
-  <section class="view" data-view="home">
-    <div class="top-bar">
-      <div>
-        <div class="brand">MixPay</div>
-        <div class="brand-tagline">اشتري • اجمع • حوّل • استبدل</div>
-      </div>
-      <button class="icon-btn" onclick="navigateTo('profile')">👤</button>
-    </div>
+    <h1>لا يوجد اتصال بالإنترنت</h1>
 
-    <div class="wallet-card">
-      <div class="wallet-label">💰 الرصيد الحالي</div>
-      <div class="wallet-balance js-balance">0 د.ع</div>
-      <div class="wallet-number-row">
-        <span>رقم المحفظة</span>
-        <span class="wallet-number js-wallet-number">------</span>
-        <button class="copy-btn" onclick="copyToClipboard(currentWalletNumber)">📋</button>
-      </div>
-    </div>
-
-    <div class="quick-actions">
-      <a class="quick-action" onclick="navigateTo('redeem')"><span class="qa-icon">🎁</span><span class="qa-label">إدخال كود</span></a>
-      <a class="quick-action" onclick="navigateTo('transfer')"><span class="qa-icon">🔄</span><span class="qa-label">تحويل</span></a>
-      <a class="quick-action" onclick="navigateTo('store')"><span class="qa-icon">🏪</span><span class="qa-label">المتجر</span></a>
-      <a class="quick-action" onclick="navigateTo('purchases')"><span class="qa-icon">📦</span><span class="qa-label">مشترياتي</span></a>
-      <a class="quick-action" onclick="navigateTo('wallet')"><span class="qa-icon">📜</span><span class="qa-label">السجل</span></a>
-    </div>
-
-    <div class="section-title"><h3>🔥 المنتجات المميزة</h3><a onclick="navigateTo('store')">عرض الكل</a></div>
-    <div class="products-scroll" id="featuredProducts"></div>
-
-    <div class="section-title"><h3>🕐 آخر العمليات</h3><a onclick="navigateTo('wallet')">عرض الكل</a></div>
-    <div class="transactions-list" id="homeTransactionsList"></div>
-  </section>
-
-  <!-- ============ شاشة: المحفظة ============ -->
-  <section class="view" data-view="wallet">
-    <div class="page-header">
-      <button class="icon-btn" onclick="navigateTo('home')">→</button>
-      <h2>محفظتي</h2>
-    </div>
-    <div class="wallet-card">
-      <div class="wallet-label">💰 الرصيد الحالي</div>
-      <div class="wallet-balance js-balance">0 د.ع</div>
-      <div class="wallet-number-row">
-        <span>رقم المحفظة</span>
-        <span class="wallet-number js-wallet-number">------</span>
-        <button class="copy-btn" onclick="copyToClipboard(currentWalletNumber)">📋</button>
-      </div>
-    </div>
-    <div class="section-title"><h3>📜 سجل العمليات</h3></div>
-    <div class="transactions-list" id="walletTransactionsList"></div>
-  </section>
-
-  <!-- ============ شاشة: التحويل ============ -->
-  <section class="view" data-view="transfer">
-    <div class="page-header">
-      <button class="icon-btn" onclick="navigateTo('home')">→</button>
-      <h2>تحويل إلى مستخدم آخر</h2>
-    </div>
-    <div class="glass-card" style="margin:0 20px 20px;">
-      <div class="wallet-label">رصيدك الحالي</div>
-      <div class="wallet-balance js-balance" style="font-size:26px;">0 د.ع</div>
-    </div>
-    
-    <form class="form-page" id="transferLookupForm" style="padding-top:0;">
-      <div class="form-group">
-        <label>رقم محفظة المستلم</label>
-        <input type="text" id="toWalletNumber" inputmode="numeric" placeholder="مثال: 1999" required />
-      </div>
-      <div class="form-group">
-        <label>المبلغ (د.ع)</label>
-        <input type="number" id="transferAmount" min="250" placeholder="مثال: 2000" required />
-      </div>
-      <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
-        * رسوم تحويل ثابتة قدرها 250 د.ع تُخصم من المرسل فقط.
-      </p>
-      <button type="submit" class="btn-primary">متابعة التحويل</button>
-    </form>
-  </section>
-
-  <!-- ============ شاشة: إدخال كود ============ -->
-  <section class="view" data-view="redeem">
-    <div class="page-header">
-      <button class="icon-btn" onclick="navigateTo('home')">→</button>
-      <h2>🎁 إدخال كود</h2>
-    </div>
-    <div style="padding:10px 20px 20px;text-align:center;">
-      <div style="font-size:50px;">🎟️</div>
-      <p style="color:var(--text-secondary);font-size:13.5px;margin-top:8px;">
-        أدخل كود المنتج الموجود على عبوتك لإضافة قيمته إلى محفظتك مباشرة.
-      </p>
-      <p style="color:var(--gold);font-size:11.5px;margin-top:6px;">
-        ⏳ الرصيد الناتج عن الأكواد صالح للاستخدام لمدة شهرين من تاريخ الإضافة، وبعدها يتم استرداده تلقائياً.
-      </p>
-      <p id="redeemAttemptsInfo" style="font-size:11.5px;color:var(--mix-teal);font-weight:700;margin-top:10px;">🔢 المحاولات المتبقية اليوم: -- من 10</p>
-    </div>
-    <form class="form-page" id="redeemForm" style="padding-top:0;">
-      <div class="form-group">
-        <label>كود MixPay</label>
-        <input type="text" id="codeInput" placeholder="مثال: A7K9-QW3R-X2P5" style="text-align:center;letter-spacing:2px;font-weight:700;font-family:monospace;" required />
-      </div>
-      <button type="submit" class="btn-primary">تحقق واستلم المكافأة</button>
-    </form>
-  </section>
-
-  <!-- ============ شاشة: المتجر ============ -->
-  <section class="view" data-view="store">
-    <div class="page-header">
-      <button class="icon-btn" onclick="navigateTo('home')">→</button>
-      <h2>🏪 MixPay Store</h2>
-    </div>
-    <div class="form-page" style="padding-top:0;">
-      <div class="form-group" style="margin-bottom:12px;">
-        <input type="text" id="productSearch" placeholder="🔍 ابحث عن منتج..." />
-      </div>
-    </div>
-    <div class="products-grid" id="productsGrid"></div>
-  </section>
-
-  <!-- ============ شاشة: مشترياتي ============ -->
-  <section class="view" data-view="purchases">
-    <div class="page-header">
-      <button class="icon-btn" onclick="navigateTo('home')">→</button>
-      <h2>📦 مشترياتي</h2>
-    </div>
-    <div style="padding:0 20px 12px;">
-      <p style="color:var(--text-muted);font-size:12px;">جميع الرموز التي اشتريتها تظهر هنا. تنتهي صلاحيتها بعد 7 أيام من تاريخ الشراء.</p>
-    </div>
-    <div class="purchases-list" id="purchasesList"></div>
-  </section>
-
-  <!-- ============ شاشة: حسابي ============ -->
-  <section class="view" data-view="profile">
-    <div class="page-header">
-      <button class="icon-btn" onclick="navigateTo('home')">→</button>
-      <h2>حسابي</h2>
-    </div>
-    <div class="glass-card" style="margin:0 20px 20px;text-align:center;">
-      <div style="width:76px;height:76px;border-radius:50%;background:var(--grad-mix);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 12px;box-shadow:0 0 0 4px rgba(123,108,246,0.16), 0 10px 26px rgba(123,108,246,0.35);position:relative;">👤</div>
-      <div id="profileName" style="font-weight:700;font-size:17px;"></div>
-      <div id="profileEmail" style="color:var(--text-secondary);font-size:13px;margin-top:4px;"></div>
-    </div>
-    <div class="form-page" style="padding-top:0;">
-      <div class="glass-card" style="margin-bottom:12px;">
-        <div class="confirm-row"><span><span class="profile-row-icon">🔢</span>رقم المحفظة</span><span id="profileWallet">-</span></div>
-        <div class="confirm-row" style="border-bottom:none;"><span><span class="profile-row-icon">📅</span>تاريخ الانضمام</span><span id="profileJoinDate">-</span></div>
-      </div>
-
-      <!-- ============ قسم PIN ============ -->
-      <div class="glass-card" style="margin-bottom:12px;">
-        <div class="pin-card">
-          <div class="pin-glyph">🔐</div>
-          <div class="pin-text">
-            <div class="pin-title">رمز PIN للتحويلات</div>
-            <div class="pin-dots">• • • • مفعّل</div>
-          </div>
-          <button type="button" class="pin-edit-btn" onclick="openChangePinModal()" title="تغيير الرمز">✏️</button>
-        </div>
-        <p style="font-size:11.5px;color:var(--text-muted);">يُستخدم هذا الرمز لتأكيد عمليات التحويل. غيّره بشكل دوري للحفاظ على أمان محفظتك.</p>
-
-        <button type="button" class="forgot-pin-link" onclick="openResetPinModal()">
-          🔑 نسيت الرمز؟ أعد تعيينه بكلمة مرور حسابك
-        </button>
-      </div>
-
-      <button class="btn-secondary" id="logoutBtn" style="color:var(--danger);">🚪 تسجيل الخروج</button>
-    </div>
-  </section>
-
-  <!-- ============ التنقل السفلي ============ -->
-  <nav class="bottom-nav" id="bottomNav">
-    <a data-nav="home" onclick="navigateTo('home')"><span class="nav-icon">🏠</span>الرئيسية</a>
-    <a data-nav="store" onclick="navigateTo('store')"><span class="nav-icon">🏪</span>المتجر</a>
-    <a data-nav="transfer" onclick="navigateTo('transfer')"><span class="nav-icon">🔄</span>التحويل</a>
-    <a data-nav="purchases" onclick="navigateTo('purchases')"><span class="nav-icon">📦</span>مشترياتي</a>
-    <a data-nav="profile" onclick="navigateTo('profile')"><span class="nav-icon">👤</span>حسابي</a>
-  </nav>
-
-</div>
-
-<!-- ============ نافذة: نجاح استبدال الكود ============ -->
-<div class="modal-overlay" id="successModal">
-  <div class="modal-sheet" style="text-align:center;">
-    <div class="modal-handle"></div>
-    <div class="success-icon">🎉</div>
-    <div class="modal-title">مبروك!</div>
-    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:6px;">تمت إضافة</p>
-    <div class="wallet-balance" id="successAmount" style="font-size:28px;color:var(--gold);">0 د.ع</div>
-    <p style="color:var(--text-secondary);font-size:14px;margin:6px 0 6px;">إلى محفظتك</p>
-    <p style="color:var(--gold);font-size:11.5px;margin-bottom:20px;">⏳ هذا الرصيد صالح لمدة شهرين من اليوم، وبعدها سيتم استرداده تلقائياً إن لم يُستخدم.</p>
-    <button class="btn-primary" onclick="closeModal('successModal')">تم</button>
-  </div>
-</div>
-
-<!-- ============ نافذة: نجاح شراء المنتج ============ -->
-<div class="modal-overlay" id="purchaseSuccessModal">
-  <div class="modal-sheet" style="text-align:center;">
-    <div class="modal-handle"></div>
-    <div class="success-icon">🛍️</div>
-    <div class="modal-title">تم الشراء بنجاح!</div>
-    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:4px;">المنتج: <span id="purchaseProductName" style="color:var(--gold);font-weight:700;"></span></p>
-    <p style="color:var(--text-secondary);font-size:13px;margin-bottom:4px;">قيمة الرصيد: <span id="purchaseValue" style="color:var(--gold);font-weight:700;"></span></p>
-    <div style="background:var(--surface);border-radius:12px;padding:16px;margin:12px 0 16px;border:1px solid rgba(63,214,198,0.2);">
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">🔑 رمز التعبئة الخاص بك:</p>
-      <p id="purchaseCodeDisplay" style="font-family:monospace;font-size:20px;font-weight:800;color:var(--gold);letter-spacing:2px;word-break:break-all;"></p>
-      <p style="font-size:10px;color:var(--text-muted);margin-top:6px;">⏳ هذا الرمز صالح لمدة 7 أيام من تاريخ الشراء</p>
-    </div>
-    <button class="btn-primary" onclick="copyToClipboard(document.getElementById('purchaseCodeDisplay').textContent)">📋 نسخ الرمز</button>
-    <button class="btn-secondary" style="margin-top:10px;" onclick="closeModal('purchaseSuccessModal')">تم</button>
-  </div>
-</div>
-
-<!-- ============ نافذة: تأكيد التحويل ============ -->
-<div class="modal-overlay" id="confirmTransferModal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">تأكيد التحويل</div>
-    <div class="confirm-row"><span>المستلم</span><span id="confirmRecipientName">-</span></div>
-    <div class="confirm-row"><span>رقم المحفظة</span><span id="confirmWalletNumber">-</span></div>
-    <div class="confirm-row"><span>المبلغ</span><span id="confirmAmount">-</span></div>
-    <div class="confirm-row"><span>رسوم التحويل</span><span id="confirmFee">-</span></div>
-    <div class="confirm-row total"><span>إجمالي الخصم</span><span id="confirmTotal">-</span></div>
-    <form id="transferConfirmForm">
-      <div class="form-group" style="margin-top:16px;">
-        <label>أدخل PIN للتأكيد</label>
-        <div class="password-field">
-          <input type="password" id="transferPin" inputmode="numeric" maxlength="6" placeholder="••••" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('transferPin', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:6px;">
-          <button type="button" onclick="closeModal('confirmTransferModal'); openResetPinModal();" style="font-size:11px;color:var(--mix-teal);background:none;border:none;cursor:pointer;font-weight:700;">
-            🔑 نسيت PIN؟
-          </button>
-        </div>
-      </div>
-      <button type="submit" class="btn-primary">تأكيد وإرسال</button>
-      <button type="button" class="btn-secondary" style="margin-top:10px;" onclick="closeModal('confirmTransferModal')">إلغاء</button>
-    </form>
-  </div>
-</div>
-
-<!-- ============ نافذة: تفاصيل المنتج ============ -->
-<div class="modal-overlay" id="productModal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="product-icon" style="font-size:64px;text-align:center;margin-bottom:10px;">📦</div>
-    <div class="modal-title" id="productModalName" style="text-align:center;">-</div>
-    <p style="color:var(--text-secondary);font-size:13px;text-align:center;margin-bottom:14px;" id="productModalDesc"></p>
-    <div class="confirm-row"><span>السعر</span><span id="productModalPrice" style="color:var(--gold);font-weight:700;">-</span></div>
-    <div class="confirm-row" style="border-bottom:none;"><span>المتبقي</span><span id="productModalStock">-</span></div>
-    <button class="btn-primary" style="margin-top:16px;" onclick="confirmPurchase()">🛒 شراء الآن</button>
-    <button class="btn-secondary" style="margin-top:10px;" onclick="closeModal('productModal')">إغلاق</button>
-  </div>
-</div>
-
-<!-- ============ نافذة: تغيير رمز PIN ============ -->
-<div class="modal-overlay" id="changePinModal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">🔐 تغيير رمز PIN</div>
-    <p style="color:var(--text-secondary);font-size:12.5px;text-align:center;margin-bottom:16px;">أدخل رمزك الحالي، ثم اختر رمزاً جديداً من 4 إلى 6 أرقام</p>
-    <form id="changePinForm">
-      <div class="form-group">
-        <label>الرمز الحالي</label>
-        <div class="password-field">
-          <input type="password" id="currentPinInput" inputmode="numeric" maxlength="6" placeholder="••••" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('currentPinInput', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>الرمز الجديد</label>
-        <div class="password-field">
-          <input type="password" id="newPinInput" inputmode="numeric" maxlength="6" placeholder="••••" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('newPinInput', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>تأكيد الرمز الجديد</label>
-        <div class="password-field">
-          <input type="password" id="confirmPinInput" inputmode="numeric" maxlength="6" placeholder="••••" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('confirmPinInput', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <button type="submit" class="btn-primary">💾 حفظ الرمز الجديد</button>
-      <button type="button" class="btn-secondary" style="margin-top:10px;" onclick="closeModal('changePinModal')">إلغاء</button>
-    </form>
-  </div>
-</div>
-
-<!-- ============ نافذة: إعادة تعيين PIN بكلمة المرور ============ -->
-<div class="modal-overlay" id="resetPinModal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div style="text-align:center;font-size:44px;margin-bottom:8px;">🔑</div>
-    <div class="modal-title">إعادة تعيين PIN بكلمة المرور</div>
-    <p style="color:var(--text-secondary);font-size:12.5px;text-align:center;margin-bottom:18px;">
-      لأمان حسابك، أدخل كلمة مرور تسجيل الدخول لتأكيد هويتك، ثم اختر رمز PIN جديد
+    <p>
+        يبدو أن جهازك غير متصل بالإنترنت.
+        تحقق من الشبكة، وسيتم فتح MixPay تلقائيًا عند عودة الاتصال.
     </p>
 
-    <form id="resetPinForm">
-      <div class="form-group">
-        <label>كلمة مرور الحساب</label>
-        <div class="password-field">
-          <input type="password" id="resetAccountPassword" placeholder="••••••••" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('resetAccountPassword', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <div class="divider"><hr /><span>ثم اختر PIN جديد</span></div>
-      <div class="form-group">
-        <label>PIN الجديد (4 إلى 6 أرقام)</label>
-        <div class="password-field">
-          <input type="password" id="resetNewPin" inputmode="numeric" maxlength="6" placeholder="••••" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('resetNewPin', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>تأكيد PIN الجديد</label>
-        <div class="password-field">
-          <input type="password" id="resetConfirmPin" inputmode="numeric" maxlength="6" placeholder="••••" required />
-          <button type="button" class="eye-toggle" onclick="togglePasswordField('resetConfirmPin', this)">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l18 18"></path><path d="M10.6 5.2A11.6 11.6 0 0 1 12 5c7 0 11 7 11 7a13.5 13.5 0 0 1-3.4 4.1M6.6 6.6C3.6 8.5 1 12 1 12s4 7 11 7a10.9 10.9 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
-          </button>
-        </div>
-      </div>
-      <button type="submit" class="btn-primary" id="resetPinSubmitBtn">✅ تأكيد وإعادة تعيين PIN</button>
-      <button type="button" class="btn-secondary" style="margin-top:10px;" onclick="closeModal('resetPinModal')">إلغاء</button>
-    </form>
-  </div>
-</div>
+    <div class="status">
+        <span class="dot"></span>
+        <span id="statusText">غير متصل</span>
+    </div>
 
-<!-- ============ شاشة عدم الاتصال بالإنترنت ============ -->
-<div class="offline-overlay" id="offlineOverlay">
-  <div class="offline-card">
-    <div class="offline-brand">MixPay</div>
-    <div class="offline-icon-wrap">📡</div>
-    <div class="offline-title">لا يوجد اتصال بالإنترنت</div>
-    <p class="offline-text">يبدو أنك غير متصل بالشبكة حالياً. تحقق من اتصال الواي فاي أو بيانات الجوال، ثم أعد المحاولة للمتابعة داخل محفظتك.</p>
-    <div class="offline-dots"><span></span><span></span><span></span></div>
-    <button class="btn-primary" onclick="checkConnection()">🔄 إعادة المحاولة</button>
-  </div>
-</div>
+    <button onclick="checkConnection()">
+        🔄 إعادة المحاولة
+    </button>
 
-<!-- ============ Firebase SDK ============ -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <div class="loading" id="loading">
+        جاري التحقق من الاتصال...
+    </div>
+
+</div>
 
 <script>
-// ==============================================
-// MixPay - إعدادات Firebase
-// ==============================================
-const firebaseConfig = {
-  apiKey: "AIzaSyA4MvZBdOT7fFQ6ZFf5TPNH-kgnqg0aYW0",
-  authDomain: "mixpay-edb5a.firebaseapp.com",
-  databaseURL: "https://mixpay-edb5a-default-rtdb.firebaseio.com",
-  projectId: "mixpay-edb5a",
-  storageBucket: "mixpay-edb5a.firebasestorage.app",
-  messagingSenderId: "637517014028",
-  appId: "1:637517014028:web:0ae5bedc4cba85afcb7a29",
-  measurementId: "G-ZQ565N504N"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
 
-// ==============================================
-// أدوات مساعدة عامة
-// ==============================================
-function formatIQD(amount) { return new Intl.NumberFormat("ar-IQ").format(amount) + " د.ع"; }
+const MIXPAY_URL =
+"https://mosamuslimahmedalamiri-cloud.github.io/MixPay-2-/";
 
-function showToast(message, type = "success") {
-  let container = document.getElementById("toastContainer");
-  if (!container) {
-    container = document.createElement("div");
-    container.id = "toastContainer";
-    container.className = "toast-container";
-    document.body.appendChild(container);
-  }
-  const toast = document.createElement("div");
-  toast.className = `toast ${type === "error" ? "toast-error" : ""}`;
-  toast.textContent = message;
-  container.appendChild(toast);
-  requestAnimationFrame(() => toast.classList.add("show"));
-  setTimeout(() => { toast.classList.remove("show"); setTimeout(() => toast.remove(), 300); }, 3200);
-}
+let checking = false;
 
-function showLoader() {
-  let loader = document.getElementById("globalLoader");
-  if (!loader) {
-    loader = document.createElement("div");
-    loader.id = "globalLoader";
-    loader.className = "loader-overlay";
-    loader.innerHTML = `<div class="spinner"></div>`;
-    document.body.appendChild(loader);
-  }
-  loader.classList.add("visible");
-}
-function hideLoader() {
-  const loader = document.getElementById("globalLoader");
-  if (loader) loader.classList.remove("visible");
-}
 
-async function copyToClipboard(text) {
-  try { await navigator.clipboard.writeText(text); showToast("تم النسخ بنجاح 📋"); }
-  catch (e) { showToast("تعذر النسخ", "error"); }
-}
+/* فحص الاتصال */
 
-function openModal(id) { const m = document.getElementById(id); if (m) m.classList.add("open"); }
-function closeModal(id) { const m = document.getElementById(id); if (m) m.classList.remove("open"); }
-
-function togglePasswordField(inputId, btn) {
-  const input = document.getElementById(inputId);
-  if (!input) return;
-  const revealed = input.type === "text";
-  input.type = revealed ? "password" : "text";
-  btn.classList.toggle("revealed", !revealed);
-}
-
-function burstConfetti(count = 26) {
-  const colors = ["#7B6CF6", "#3FD6C6", "#E8B45C", "#F26D9C", "#6C7BF6"];
-  for (let i = 0; i < count; i++) {
-    const piece = document.createElement("div");
-    piece.className = "confetti-piece";
-    const size = 6 + Math.random() * 6;
-    piece.style.width = size + "px";
-    piece.style.height = (size * 0.4) + "px";
-    piece.style.left = (Math.random() * 100) + "vw";
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.animationDuration = (1.8 + Math.random() * 1.4) + "s";
-    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-    document.body.appendChild(piece);
-    setTimeout(() => piece.remove(), 3400);
-  }
-}
-
-function attachRipple(selector) {
-  document.querySelectorAll(selector).forEach((el) => {
-    if (el.dataset.rippleBound) return;
-    el.dataset.rippleBound = "1";
-    if (getComputedStyle(el).position === "static") el.style.position = "relative";
-    el.style.overflow = "hidden";
-    el.addEventListener("pointerdown", (e) => {
-      const rect = el.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height) * 1.2;
-      const span = document.createElement("span");
-      span.className = "ripple";
-      span.style.width = span.style.height = size + "px";
-      span.style.left = (e.clientX - rect.left - size / 2) + "px";
-      span.style.top = (e.clientY - rect.top - size / 2) + "px";
-      el.appendChild(span);
-      setTimeout(() => span.remove(), 650);
-    });
-  });
-}
-
-function initVisualEffects() {
-  attachRipple(".btn-primary, .btn-secondary, .quick-action, .icon-btn, .product-card, .bottom-nav a, .pin-edit-btn, .eye-toggle, .forgot-pin-link");
-  document.querySelectorAll(".wallet-card").forEach((card) => {
-    if (!card.querySelector(".card-shine")) {
-      const shine = document.createElement("div");
-      shine.className = "card-shine";
-      card.appendChild(shine);
-    }
-  });
-}
-
-function formatDateTime(timestamp) {
-  if (!timestamp) return "-";
-  const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-  return date.toLocaleString("ar-IQ", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
-}
-
-// ==============================================
-// 📡 كشف حالة الاتصال بالإنترنت
-// ==============================================
-function updateOnlineStatus() {
-  const overlay = document.getElementById("offlineOverlay");
-  if (!overlay) return;
-  if (navigator.onLine) {
-    overlay.classList.remove("visible");
-  } else {
-    overlay.classList.add("visible");
-  }
-}
 function checkConnection() {
-  updateOnlineStatus();
-  if (navigator.onLine) showToast("✅ تم استعادة الاتصال بالإنترنت");
-  else showToast("📡 لا يزال الاتصال منقطعاً، حاول لاحقاً", "error");
-}
-window.addEventListener("online", () => { updateOnlineStatus(); showToast("✅ تم الاتصال بالإنترنت مجدداً"); });
-window.addEventListener("offline", () => { updateOnlineStatus(); });
 
-// ==============================================
-// نظام التنقل بين الشاشات
-// ==============================================
-const MAIN_VIEWS = ["home", "wallet", "transfer", "redeem", "store", "profile", "purchases"];
+    if (checking) return;
 
-function navigateTo(viewName) {
-  document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-  const target = document.querySelector(`.view[data-view="${viewName}"]`);
-  if (target) target.classList.add("active");
+    checking = true;
 
-  const bottomNav = document.getElementById("bottomNav");
-  if (MAIN_VIEWS.includes(viewName)) {
-    bottomNav.classList.add("active-nav");
-  } else {
-    bottomNav.classList.remove("active-nav");
-  }
-  document.querySelectorAll("#bottomNav a").forEach((a) => {
-    a.classList.toggle("active", a.dataset.nav === viewName);
-  });
+    document.getElementById("loading").style.display = "block";
 
-  if (viewName === "home") { loadTransactions("homeTransactionsList", 5); loadProducts("featuredProducts", true); }
-  if (viewName === "wallet") { loadTransactions("walletTransactionsList", 50); }
-  if (viewName === "store") { loadProducts("productsGrid", false); }
-  if (viewName === "purchases") { loadPurchases(); }
-  if (viewName === "profile") { loadProfile(); }
-  if (viewName === "redeem") { updateRedeemAttemptsUI(); }
+    document.getElementById("statusText").innerText =
+        "جاري الفحص...";
 
-  window.scrollTo(0, 0);
-  setTimeout(initVisualEffects, 60);
-}
 
-// ==============================================
-// المصادقة الأساسية
-// ==============================================
-let currentWalletNumber = null;
-let currentUserData = null;
-let isRegistering = false;
-
-async function generateUniqueWalletNumber() {
-  let walletNumber, exists = true;
-  while (exists) {
-    walletNumber = String(Math.floor(100000 + Math.random() * 900000));
-    if (walletNumber === "1999") continue;
-    const doc = await db.collection("wallets").doc(walletNumber).get();
-    exists = doc.exists;
-  }
-  return walletNumber;
-}
-
-function hashPin(pin) {
-  let hash = 0;
-  for (let i = 0; i < pin.length; i++) {
-    const char = pin.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return "pin_" + Math.abs(hash).toString(16) + "_" + pin.length;
-}
-
-// ==============================================
-// 🔑 إعادة تعيين PIN بإعادة تصديق كلمة المرور
-// ==============================================
-function openResetPinModal() {
-  if (!auth.currentUser) { showToast("🔒 يجب تسجيل الدخول أولاً", "error"); return; }
-  const form = document.getElementById("resetPinForm");
-  if (form) form.reset();
-  document.querySelectorAll("#resetPinModal .eye-toggle.revealed").forEach((btn) => btn.classList.remove("revealed"));
-  document.querySelectorAll("#resetPinModal input[type='text']").forEach((input) => (input.type = "password"));
-  document.getElementById("resetPinSubmitBtn").disabled = false;
-  openModal("resetPinModal");
-}
-
-async function resetPinWithPassword(accountPassword, newPin, confirmPin) {
-  if (!auth.currentUser || !auth.currentUser.email) { showToast("🔒 يجب تسجيل الدخول أولاً", "error"); return; }
-  if (!accountPassword) { showToast("⚠️ أدخل كلمة مرور حسابك", "error"); return; }
-  if (!/^\d{4,6}$/.test(newPin)) { showToast("⚠️ PIN الجديد يجب أن يكون 4-6 أرقام", "error"); return; }
-  if (newPin !== confirmPin) { showToast("⚠️ تأكيد PIN غير مطابق", "error"); return; }
-
-  const btn = document.getElementById("resetPinSubmitBtn");
-  btn.disabled = true;
-  showLoader();
-  try {
-    const credential = firebase.auth.EmailAuthProvider.credential(auth.currentUser.email, accountPassword);
-    await auth.currentUser.reauthenticateWithCredential(credential);
-
-    const pinHash = hashPin(newPin);
-    await db.collection("users").doc(auth.currentUser.uid).update({
-      pinHash: pinHash,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    if (currentUserData) currentUserData.pinHash = pinHash;
-
-    closeModal("resetPinModal");
-    showToast("🔐 تم إعادة تعيين PIN بنجاح ✅");
-    burstConfetti(22);
-  } catch (error) {
-    console.error("resetPinWithPassword error:", error);
-    const map = {
-      "auth/wrong-password": "🔑 كلمة المرور غير صحيحة",
-      "auth/too-many-requests": "⏳ محاولات كثيرة، حاول لاحقاً",
-      "auth/user-mismatch": "❌ حدث خطأ بالتحقق من الحساب",
-      "auth/network-request-failed": "📡 مشكلة بالاتصال بالإنترنت"
-    };
-    showToast(map[error.code] || "⚠️ تعذر إعادة تعيين PIN، تأكد من كلمة المرور", "error");
-  } finally {
-    hideLoader();
-    btn.disabled = false;
-  }
-}
-
-// ==============================================
-// 🔐 تغيير رمز PIN (بمعرفة الرمز الحالي)
-// ==============================================
-function openChangePinModal() {
-  const form = document.getElementById("changePinForm");
-  if (form) form.reset();
-  document.querySelectorAll("#changePinModal .eye-toggle.revealed").forEach((btn) => btn.classList.remove("revealed"));
-  document.querySelectorAll("#changePinModal input[type='text']").forEach((input) => (input.type = "password"));
-  openModal("changePinModal");
-}
-
-async function changePin(currentPin, newPin, confirmPin) {
-  if (!auth.currentUser) { showToast("🔒 يجب تسجيل الدخول أولاً", "error"); return; }
-  if (!/^\d{4,6}$/.test(currentPin)) { showToast("⚠️ أدخل رمزك الحالي بشكل صحيح", "error"); return; }
-  if (!/^\d{4,6}$/.test(newPin)) { showToast("⚠️ الرمز الجديد يجب أن يكون 4-6 أرقام", "error"); return; }
-  if (newPin !== confirmPin) { showToast("⚠️ تأكيد الرمز الجديد غير مطابق", "error"); return; }
-  if (newPin === currentPin) { showToast("⚠️ الرمز الجديد يجب أن يختلف عن الحالي", "error"); return; }
-
-  showLoader();
-  try {
-    const userRef = db.collection("users").doc(auth.currentUser.uid);
-    const userDoc = await userRef.get();
-    if (!userDoc.exists) throw new Error("user-not-found");
-
-    if ((userDoc.data().pinHash || "") !== hashPin(currentPin)) {
-      throw new Error("invalid-pin");
-    }
-
-    await userRef.update({ pinHash: hashPin(newPin) });
-    if (currentUserData) currentUserData.pinHash = hashPin(newPin);
-
-    closeModal("changePinModal");
-    showToast("🔐 تم تحديث رمز PIN بنجاح ✅");
-    burstConfetti(22);
-  } catch (error) {
-    console.error("changePin error:", error);
-    const map = { "invalid-pin": "🔑 الرمز الحالي غير صحيح", "user-not-found": "❌ المستخدم غير موجود" };
-    showToast(map[error.message] || "⚠️ تعذر تحديث الرمز", "error");
-  } finally {
-    hideLoader();
-  }
-}
-
-// ==============================================
-// تسجيل الدخول والتسجيل
-// ==============================================
-
-async function loginUser(email, password) {
-  showLoader();
-  try {
-    await auth.signInWithEmailAndPassword(email, password);
-  } catch (error) {
-    showToast(translateAuthError(error.code), "error");
-  } finally {
-    hideLoader();
-  }
-}
-
-async function registerUser(name, email, password, pin) {
-  if (!name || name.trim().length < 2) {
-    showToast("الاسم يجب أن يكون حرفين على الأقل", "error");
-    return;
-  }
-  if (!email || !email.includes('@')) {
-    showToast("البريد الإلكتروني غير صحيح", "error");
-    return;
-  }
-  if (!password || password.length < 6) {
-    showToast("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "error");
-    return;
-  }
-  if (!pin || !/^\d{4,6}$/.test(pin)) {
-    showToast("PIN يجب أن يكون من 4 إلى 6 أرقام", "error");
-    return;
-  }
-
-  showLoader();
-  isRegistering = true;
-  
-  try {
-    const cred = await auth.createUserWithEmailAndPassword(email, password);
-    const uid = cred.user.uid;
-    const walletNumber = await generateUniqueWalletNumber();
-    const pinHash = hashPin(pin);
-
-    await db.collection("users").doc(uid).set({
-      uid,
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
-      walletId: `wallets/${walletNumber}`,
-      pinHash: pinHash,
-      role: "user",
-      status: "active",
-      authProvider: "email",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    await db.collection("wallets").doc(walletNumber).set({
-      walletNumber,
-      uid,
-      balance: 0,
-      currency: "IQD",
-      status: "active",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    currentUserData = { 
-      uid, 
-      name: name.trim(), 
-      email: email.toLowerCase().trim(), 
-      walletId: `wallets/${walletNumber}`,
-      role: "user",
-      status: "active"
-    };
-    currentWalletNumber = walletNumber;
-
-    document.querySelectorAll(".js-balance").forEach((el) => (el.textContent = formatIQD(0)));
-    document.querySelectorAll(".js-wallet-number").forEach((el) => (el.textContent = walletNumber));
-
-    navigateTo("home");
-    showToast("🎉 تم إنشاء الحساب بنجاح!");
-    listenToWalletBalance(walletNumber);
-
-  } catch (error) {
-    console.error("❌ Registration error:", error);
-    showToast(translateAuthError(error.code) || "حدث خطأ أثناء التسجيل", "error");
-    try {
-      if (auth.currentUser) await auth.currentUser.delete();
-    } catch (e) { /* تجاهل */ }
-  } finally {
-    isRegistering = false;
-    hideLoader();
-  }
-}
-
-function translateAuthError(code) {
-  const messages = {
-    "auth/email-already-in-use": "📧 البريد الإلكتروني مستخدم مسبقاً",
-    "auth/invalid-email": "📧 البريد الإلكتروني غير صالح",
-    "auth/weak-password": "🔒 كلمة المرور ضعيفة (6 أحرف على الأقل)",
-    "auth/user-not-found": "❌ الحساب غير موجود",
-    "auth/wrong-password": "🔑 كلمة المرور غير صحيحة",
-    "auth/too-many-requests": "⏳ محاولات كثيرة، حاول لاحقاً",
-    "auth/network-request-failed": "📡 مشكلة في الاتصال بالإنترنت"
-  };
-  return messages[code] || "⚠️ حدث خطأ: " + code;
-}
-
-function logout() { 
-  auth.signOut(); 
-  currentWalletNumber = null;
-  currentUserData = null;
-}
-
-// ==============================================
-// المحفظة والمنتجات والمعاملات
-// ==============================================
-
-async function loadWalletData(uid) {
-  try {
-    const userDoc = await db.collection("users").doc(uid).get();
-    if (!userDoc.exists) {
-      throw new Error("بيانات المستخدم غير موجودة");
-    }
-    currentUserData = userDoc.data();
-    const walletNumber = currentUserData.walletId.split("/")[1];
-    currentWalletNumber = walletNumber;
-
-    const walletDoc = await db.collection("wallets").doc(walletNumber).get();
-    if (!walletDoc.exists) {
-      throw new Error("المحفظة غير موجودة");
-    }
-    const walletData = walletDoc.data();
-
-    document.querySelectorAll(".js-balance").forEach((el) => (el.textContent = formatIQD(walletData.balance || 0)));
-    document.querySelectorAll(".js-wallet-number").forEach((el) => (el.textContent = walletNumber));
-
-    return { userData: currentUserData, walletData, walletNumber };
-  } catch (error) {
-    console.error("❌ loadWalletData error:", error);
-    throw error;
-  }
-}
-
-function listenToWalletBalance(walletNumber) {
-  if (!walletNumber) return;
-  let lastBalance = null;
-  db.collection("wallets").doc(walletNumber).onSnapshot((doc) => {
-    if (doc.exists) {
-      const balance = doc.data().balance || 0;
-      const changed = lastBalance !== null && balance !== lastBalance;
-      lastBalance = balance;
-      document.querySelectorAll(".js-balance").forEach((el) => {
-        el.textContent = formatIQD(balance);
-        if (changed) {
-          el.classList.remove("balance-pulse");
-          void el.offsetWidth;
-          el.classList.add("balance-pulse");
+    fetch(
+        MIXPAY_URL + "?connection=" + Date.now(),
+        {
+            method: "HEAD",
+            cache: "no-store"
         }
-      });
-    }
-  });
-}
+    )
 
-async function loadTransactions(listElId, limit = 20) {
-  const listEl = document.getElementById(listElId);
-  if (!listEl || !auth.currentUser) return;
+    .then(function(response) {
 
-  try {
-    const snapshot = await db.collection("transactions")
-      .where("uid", "==", auth.currentUser.uid)
-      .orderBy("createdAt", "desc").limit(limit).get();
-
-    if (snapshot.empty) { listEl.innerHTML = `<p class="empty-state">📭 لا توجد عمليات بعد</p>`; return; }
-
-    const icons = { REDEEM: "🎁", TRANSFER_OUT: "🔄", TRANSFER_IN: "💸", FEE: "💵", STORE_PURCHASE: "🛍️", EXPIRY_RECLAIM: "⏳" };
-    const labels = { REDEEM: "مكافأة كود", TRANSFER_OUT: "تحويل صادر", TRANSFER_IN: "تحويل وارد", FEE: "رسوم تحويل", STORE_PURCHASE: "شراء من المتجر", EXPIRY_RECLAIM: "استرداد رصيد منتهي" };
-
-    listEl.innerHTML = snapshot.docs.map((doc) => {
-      const t = doc.data();
-      const isPositive = ["REDEEM", "TRANSFER_IN"].includes(t.type);
-      const expiryLine = (t.type === "REDEEM" && t.expiresAt) ? `<span class="tx-date" style="color:var(--gold);">⏳ ينتهي: ${formatDateTime(t.expiresAt)}</span>` : "";
-      return `<div class="transaction-item">
-        <div class="tx-icon">${icons[t.type] || "📄"}</div>
-        <div class="tx-info"><span class="tx-title">${labels[t.type] || t.type}</span><span class="tx-date">${formatDateTime(t.createdAt)}</span>${expiryLine}</div>
-        <div class="tx-amount ${isPositive ? "positive" : "negative"}">${isPositive ? "+" : "-"}${formatIQD(t.amount)}</div>
-      </div>`;
-    }).join("");
-  } catch (e) {
-    console.error("loadTransactions error:", e);
-    listEl.innerHTML = `<p class="empty-state">❌ تعذر تحميل السجل</p>`;
-  }
-}
-
-// ==============================================
-// 🔢 الحد اليومي لمحاولات إدخال الأكواد (10 محاولات/يوم)
-// ==============================================
-const DAILY_CODE_LIMIT = 10;
-
-function getTodayDateStr() {
-  const d = new Date();
-  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-}
-
-async function checkAndIncrementRedeemAttempt() {
-  if (!auth.currentUser) throw new Error("unauthenticated");
-  const today = getTodayDateStr();
-  const limitRef = db.collection("redeemAttempts").doc(auth.currentUser.uid + "_" + today);
-
-  await db.runTransaction(async (transaction) => {
-    const doc = await transaction.get(limitRef);
-    let count = 0;
-    if (doc.exists && doc.data().date === today) {
-      count = doc.data().count || 0;
-    }
-    if (count >= DAILY_CODE_LIMIT) {
-      throw new Error("daily-limit-reached");
-    }
-    count += 1;
-    transaction.set(limitRef, {
-      uid: auth.currentUser.uid,
-      date: today,
-      count: count,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    }, { merge: true });
-  });
-}
-
-async function getRemainingRedeemAttempts() {
-  if (!auth.currentUser) return DAILY_CODE_LIMIT;
-  const today = getTodayDateStr();
-  try {
-    const doc = await db.collection("redeemAttempts").doc(auth.currentUser.uid + "_" + today).get();
-    if (doc.exists && doc.data().date === today) {
-      return Math.max(0, DAILY_CODE_LIMIT - (doc.data().count || 0));
-    }
-  } catch (e) { console.error("getRemainingRedeemAttempts error:", e); }
-  return DAILY_CODE_LIMIT;
-}
-
-async function updateRedeemAttemptsUI() {
-  const el = document.getElementById("redeemAttemptsInfo");
-  if (!el) return;
-  const remaining = await getRemainingRedeemAttempts();
-  el.textContent = `🔢 المحاولات المتبقية اليوم: ${remaining} من ${DAILY_CODE_LIMIT}`;
-}
-
-// ==============================================
-// 🎟️ توليد الأكواد - 12 حرف (XXXX-XXXX-XXXX)
-// ==============================================
-function generateCodeString() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const part = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
-  return `${part()}-${part()}-${part()}`;
-}
-
-// ==============================================
-// 🔧 استرداد كود (يدعم الصيغتين)
-// ==============================================
-async function redeemCodeDirectly(code) {
-    if (!auth.currentUser) {
-        throw new Error('unauthenticated');
-    }
-
-    // ✅ تنظيف الكود: إزالة بادئة MXP- إذا كانت موجودة
-    let cleanCode = code.toUpperCase().trim();
-    if (cleanCode.startsWith("MXP-")) {
-        cleanCode = cleanCode.substring(4);
-    }
-
-    // ✅ البحث عن الكود بالصيغة النظيفة
-    const snapshot = await db.collection('codes')
-        .where('code', '==', cleanCode)
-        .limit(1)
-        .get();
-
-    if (snapshot.empty) {
-        throw new Error('not-found');
-    }
-
-    const doc = snapshot.docs[0];
-    const codeData = doc.data();
-
-    if (codeData.status !== 'NEW') {
-        throw new Error('already-used');
-    }
-
-    const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
-    if (!userDoc.exists) {
-        throw new Error('user-not-found');
-    }
-
-    const walletNumber = userDoc.data().walletId.split('/')[1];
-    const walletRef = db.collection('wallets').doc(walletNumber);
-
-    const expiresAt = new Date();
-    expiresAt.setMonth(expiresAt.getMonth() + 2);
-
-    await db.runTransaction(async (transaction) => {
-        const walletDoc = await transaction.get(walletRef);
-        if (!walletDoc.exists) {
-            throw new Error('wallet-not-found');
+        if (!response.ok) {
+            throw new Error("offline");
         }
 
-        const currentBalance = walletDoc.data().balance || 0;
-        transaction.update(walletRef, {
-            balance: currentBalance + codeData.value
-        });
+        connected();
 
-        transaction.update(doc.ref, {
-            status: 'USED',
-            redeemedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            redeemedBy: auth.currentUser.uid
-        });
+    })
 
-        const txRef = db.collection('transactions').doc();
-        transaction.set(txRef, {
-            uid: auth.currentUser.uid,
-            walletNumber: walletNumber,
-            type: 'REDEEM',
-            amount: codeData.value,
-            code: code,
-            expiresAt: expiresAt,
-            reclaimed: false,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+    .catch(function() {
+
+        disconnected();
+
     });
 
-    return { value: codeData.value, expiresAt };
 }
 
-function translateRedeemError(message) {
-    const map = {
-        "not-found": "❌ الكود غير موجود",
-        "already-used": "⚠️ هذا الكود مستخدم من قبل",
-        "unauthenticated": "🔒 يجب تسجيل الدخول أولاً",
-        "user-not-found": "❌ المستخدم غير موجود",
-        "wallet-not-found": "❌ المحفظة غير موجودة",
-        "daily-limit-reached": "🚫 لقد استخدمت الحد الأقصى (10 محاولات) لهذا اليوم، حاول غداً"
-    };
-    return map[message] || "⚠️ تعذر التحقق من الكود";
+
+/* الاتصال رجع */
+
+function connected() {
+
+    checking = false;
+
+    document.getElementById("loading").style.display =
+        "none";
+
+    document.getElementById("statusText").innerText =
+        "تم الاتصال ✓";
+
+    setTimeout(function() {
+
+        window.location.href = MIXPAY_URL;
+
+    }, 500);
+
 }
 
-// ==============================================
-// ⏳ استرداد الرصيد بعد انتهاء صلاحيته (شهرين من تاريخ إدخال الكود)
-// ==============================================
-async function reclaimExpiredRedemptions() {
-  if (!auth.currentUser) return;
-  try {
-    const snapshot = await db.collection("transactions")
-      .where("uid", "==", auth.currentUser.uid)
-      .where("type", "==", "REDEEM")
-      .where("reclaimed", "==", false)
-      .get();
 
-    if (snapshot.empty) return;
+/* لا يوجد اتصال */
 
-    const now = new Date();
-    const expiredDocs = snapshot.docs.filter((doc) => {
-      const data = doc.data();
-      if (!data.expiresAt) return false;
-      const expiry = data.expiresAt.toDate ? data.expiresAt.toDate() : new Date(data.expiresAt);
-      return expiry <= now;
-    });
+function disconnected() {
 
-    if (expiredDocs.length === 0) return;
+    checking = false;
 
-    const userDoc = await db.collection("users").doc(auth.currentUser.uid).get();
-    if (!userDoc.exists) return;
-    const walletNumber = userDoc.data().walletId.split("/")[1];
-    const walletRef = db.collection("wallets").doc(walletNumber);
+    document.getElementById("loading").style.display =
+        "none";
 
-    let reclaimedCount = 0;
+    document.getElementById("statusText").innerText =
+        "غير متصل";
 
-    for (const doc of expiredDocs) {
-      const data = doc.data();
-      try {
-        await db.runTransaction(async (transaction) => {
-          const walletSnap = await transaction.get(walletRef);
-          if (!walletSnap.exists) return;
-          const currentBalance = walletSnap.data().balance || 0;
-          const reclaimAmount = Math.min(data.amount || 0, currentBalance);
-
-          if (reclaimAmount > 0) {
-            transaction.update(walletRef, {
-              balance: currentBalance - reclaimAmount,
-              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-          }
-
-          transaction.update(doc.ref, {
-            reclaimed: true,
-            reclaimedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            reclaimedAmount: reclaimAmount
-          });
-
-          if (reclaimAmount > 0) {
-            const rxRef = db.collection("transactions").doc();
-            transaction.set(rxRef, {
-              uid: auth.currentUser.uid,
-              walletNumber: walletNumber,
-              type: "EXPIRY_RECLAIM",
-              amount: reclaimAmount,
-              relatedCode: data.code || null,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-          }
-        });
-        reclaimedCount++;
-      } catch (innerError) {
-        console.error("reclaim single item error:", innerError);
-      }
-    }
-
-    if (reclaimedCount > 0) {
-      showToast(`⏳ انتهت صلاحية ${reclaimedCount} من رصيد الأكواد (بعد شهرين) وتم استرداده`, "error");
-      loadTransactions("homeTransactionsList", 5);
-      loadTransactions("walletTransactionsList", 50);
-    }
-  } catch (e) {
-    console.error("reclaimExpiredRedemptions error:", e);
-  }
 }
 
-// ==============================================
-// 🔧 التحويل - مع إعفاء المدير (مرسلاً ومستلماً)
-// ==============================================
-const TRANSFER_FEE = 250;
-let pendingTransfer = null;
 
-async function lookupRecipient() {
-  const toWallet = document.getElementById("toWalletNumber").value.trim();
-  const amount = Number(document.getElementById("transferAmount").value);
+/* زر إعادة المحاولة */
 
-  if (!toWallet || !amount || amount <= 0) { showToast("⚠️ أدخل بيانات صحيحة", "error"); return; }
-  if (toWallet === currentWalletNumber) { showToast("⚠️ لا يمكنك التحويل إلى محفظتك نفسها", "error"); return; }
-  if (amount < 250) { showToast("⚠️ الحد الأدنى للتحويل 250 د.ع", "error"); return; }
-
-  showLoader();
-  try {
-    // ✅ التحقق من المرسل (المستخدم الحالي)
-    const senderDoc = await db.collection("users").doc(auth.currentUser.uid).get();
-    const isSenderAdmin = senderDoc.data().role === "admin";
-
-    // ✅ التحقق من المستلم (هل هو مدير؟)
-    const walletDoc = await db.collection("wallets").doc(toWallet).get();
-    if (!walletDoc.exists) { showToast("❌ رقم المحفظة غير موجود", "error"); return; }
-    const recipientData = walletDoc.data();
-    const recipientUser = await db.collection("users").doc(recipientData.uid).get();
-    const isRecipientAdmin = recipientUser.exists && recipientUser.data().role === "admin";
-
-    // ✅ الإعفاء: إذا كان المرسل مديراً أو المستلم مديراً
-    const isExempt = isSenderAdmin || isRecipientAdmin;
-    const fee = isExempt ? 0 : TRANSFER_FEE;
-
-    pendingTransfer = { toWallet, amount, isExempt, fee };
-    document.getElementById("confirmRecipientName").textContent = recipientUser.data().name || "مستخدم";
-    document.getElementById("confirmWalletNumber").textContent = toWallet;
-    document.getElementById("confirmAmount").textContent = formatIQD(amount);
-    document.getElementById("confirmFee").textContent = formatIQD(fee) + (isExempt ? ' ⭐ معفى' : '');
-    document.getElementById("confirmTotal").textContent = formatIQD(amount + fee);
-    openModal("confirmTransferModal");
-  } catch (e) {
-    console.error("lookupRecipient error:", e);
-    showToast("❌ تعذر البحث عن المحفظة", "error");
-  } finally {
-    hideLoader();
-  }
+function retry() {
+    checkConnection();
 }
 
-async function executeTransfer() {
-  const pin = document.getElementById("transferPin").value.trim();
-  if (!pendingTransfer || !pin) return;
-  if (!/^\d{4,6}$/.test(pin)) { showToast("⚠️ PIN يجب أن يكون 4-6 أرقام", "error"); return; }
 
-  showLoader();
-  try {
-    const userDoc = await db.collection("users").doc(auth.currentUser.uid).get();
-    if (!userDoc.exists) {
-      throw new Error("المستخدم غير موجود");
-    }
-    
-    const pinHash = userDoc.data().pinHash || "";
-    const hashedPin = hashPin(pin);
-    if (pinHash !== hashedPin) {
-      throw new Error("invalid-pin");
-    }
+/* عند عودة اتصال الجهاز */
 
-    const { toWallet, amount, isExempt, fee } = pendingTransfer;
-    
-    const senderWalletNumber = currentWalletNumber;
-    const senderRef = db.collection("wallets").doc(senderWalletNumber);
-    const receiverRef = db.collection("wallets").doc(toWallet);
+window.addEventListener("online", function() {
 
-    await db.runTransaction(async (transaction) => {
-      const senderDoc = await transaction.get(senderRef);
-      const receiverDoc = await transaction.get(receiverRef);
-      
-      if (!senderDoc.exists || !receiverDoc.exists) {
-        throw new Error("wallet-not-found");
-      }
-      
-      const senderBalance = senderDoc.data().balance || 0;
-      const totalAmount = amount + fee;
-      
-      if (senderBalance < totalAmount) {
-        throw new Error("insufficient-funds");
-      }
-      
-      transaction.update(senderRef, { 
-        balance: senderBalance - totalAmount,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      
-      transaction.update(receiverRef, { 
-        balance: (receiverDoc.data().balance || 0) + amount,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      
-      const tx1 = db.collection("transactions").doc();
-      transaction.set(tx1, {
-        uid: auth.currentUser.uid,
-        walletNumber: senderWalletNumber,
-        type: 'TRANSFER_OUT',
-        amount: amount,
-        counterparty: toWallet,
-        fee: fee,
-        isExempt: isExempt,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      
-      const tx2 = db.collection("transactions").doc();
-      transaction.set(tx2, {
-        uid: receiverDoc.data().uid,
-        walletNumber: toWallet,
-        type: 'TRANSFER_IN',
-        amount: amount,
-        counterparty: senderWalletNumber,
-        isExempt: isExempt,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    });
+    checkConnection();
 
-    closeModal("confirmTransferModal");
-    const feeMessage = isExempt ? ' (معفى من الرسوم ✅)' : '';
-    showToast(`🔄 تم التحويل بنجاح ✅${feeMessage}`);
-    burstConfetti();
-    document.getElementById("transferLookupForm").reset();
-    document.getElementById("transferPin").value = "";
-    pendingTransfer = null;
-
-  } catch (error) {
-    console.error("executeTransfer error:", error);
-    showToast(translateTransferError(error.message), "error");
-  } finally {
-    hideLoader();
-  }
-}
-
-function translateTransferError(message) {
-  const map = { 
-    "insufficient-funds": "❌ الرصيد غير كافٍ",
-    "invalid-pin": "🔑 PIN غير صحيح",
-    "wallet-not-found": "❌ المحفظة غير موجودة",
-    "same-wallet": "⚠️ لا يمكن التحويل لنفس المحفظة",
-    "unauthenticated": "🔒 يجب تسجيل الدخول أولاً"
-  };
-  return map[message] || "⚠️ تعذر إتمام التحويل";
-}
-
-// ==============================================
-// 🏪 المتجر - شراء المنتجات
-// ==============================================
-
-async function loadProducts(containerId, featuredOnly = false) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  try {
-    let query = db.collection("products").where("status", "==", "available");
-    if (featuredOnly) query = query.where("featured", "==", true);
-    const snapshot = await query.limit(20).get();
-
-    if (snapshot.empty) { container.innerHTML = `<p class="empty-state">📭 لا توجد منتجات حالياً</p>`; return; }
-
-    const icons = { "asia": "📱", "zain": "📱", "iqcard": "💳", "other": "🎁" };
-
-    container.innerHTML = snapshot.docs.map((doc) => {
-      const p = doc.data();
-      const icon = icons[p.type] || "🎁";
-      const stockText = p.quantity > 0 ? `📦 ${p.quantity} متبقي` : '❗ نفذت الكمية';
-      return `<div class="product-card" onclick="openProductModal('${doc.id}')">
-        <div class="product-img-wrap"><div class="product-icon">${icon}</div></div>
-        <div class="product-info">
-          <h4>${p.name}</h4>
-          <div class="product-sub">${p.typeLabel || p.type || 'رصيد'}</div>
-          <span class="product-price">${formatIQD(p.price)}</span>
-          <div class="product-stock">${stockText}</div>
-        </div>
-      </div>`;
-    }).join("");
-    attachRipple("#" + containerId + " .product-card");
-  } catch (e) {
-    console.error("loadProducts error:", e);
-    container.innerHTML = `<p class="empty-state">❌ تعذر تحميل المنتجات</p>`;
-  }
-}
-
-// فتح نافذة شراء المنتج
-async function openProductModal(productId) {
-  if (!auth.currentUser) {
-    showToast("🔒 يجب تسجيل الدخول أولاً", "error");
-    return;
-  }
-
-  try {
-    const doc = await db.collection("products").doc(productId).get();
-    if (!doc.exists) {
-      showToast("❌ المنتج غير موجود", "error");
-      return;
-    }
-    
-    const product = doc.data();
-    
-    if (product.quantity < 1) {
-      showToast("📦 نفذت كمية المنتج", "error");
-      return;
-    }
-    
-    window.selectedProduct = { id: productId, ...product };
-    
-    document.getElementById("productModalName").textContent = product.name;
-    document.getElementById("productModalDesc").textContent = product.typeLabel || product.type || "رصيد";
-    document.getElementById("productModalPrice").textContent = formatIQD(product.price);
-    document.getElementById("productModalStock").textContent = product.quantity + " قطعة متبقي";
-    
-    openModal("productModal");
-    
-  } catch (error) {
-    console.error("openProductModal error:", error);
-    showToast("❌ تعذر تحميل المنتج", "error");
-  }
-}
-
-async function confirmPurchase() {
-  if (!window.selectedProduct) {
-    showToast("❌ حدث خطأ، حاول مرة أخرى", "error");
-    return;
-  }
-  
-  if (!auth.currentUser) {
-    showToast("🔒 يجب تسجيل الدخول أولاً", "error");
-    return;
-  }
-
-  showLoader();
-  
-  try {
-    const userDoc = await db.collection("users").doc(auth.currentUser.uid).get();
-    if (!userDoc.exists) {
-      throw new Error("user-not-found");
-    }
-    
-    const walletNumber = userDoc.data().walletId.split('/')[1];
-    const walletRef = db.collection("wallets").doc(walletNumber);
-    const productRef = db.collection("products").doc(window.selectedProduct.id);
-    
-    const productDoc = await productRef.get();
-    if (!productDoc.exists) {
-      throw new Error("product-not-found");
-    }
-    
-    const product = productDoc.data();
-    
-    if (product.quantity < 1) {
-      throw new Error("out-of-stock");
-    }
-    
-    await db.runTransaction(async (transaction) => {
-      const walletDoc = await transaction.get(walletRef);
-      if (!walletDoc.exists) {
-        throw new Error("wallet-not-found");
-      }
-      
-      const balance = walletDoc.data().balance || 0;
-      
-      if (balance < product.price) {
-        throw new Error("insufficient-funds");
-      }
-      
-      transaction.update(walletRef, {
-        balance: balance - product.price
-      });
-      
-      transaction.update(productRef, {
-        quantity: product.quantity - 1
-      });
-      
-      const purchaseRef = db.collection("purchases").doc();
-      const expiresAt = new Date();
-      expiresAt.setDate(expiresAt.getDate() + 7);
-      
-      transaction.set(purchaseRef, {
-        userId: auth.currentUser.uid,
-        productId: window.selectedProduct.id,
-        productName: product.name,
-        productType: product.type || "other",
-        typeLabel: product.typeLabel || product.name,
-        code: product.code || "رمز غير متوفر",
-        value: product.value || product.price,
-        price: product.price,
-        walletNumber: walletNumber,
-        purchasedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        expiresAt: expiresAt,
-        status: "active"
-      });
-      
-      const txRef = db.collection("transactions").doc();
-      transaction.set(txRef, {
-        uid: auth.currentUser.uid,
-        walletNumber: walletNumber,
-        type: 'STORE_PURCHASE',
-        amount: product.price,
-        productId: window.selectedProduct.id,
-        productName: product.name,
-        quantity: 1,
-        purchaseId: purchaseRef.id,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    });
-    
-    const purchaseSnapshot = await db.collection("purchases")
-      .where("userId", "==", auth.currentUser.uid)
-      .where("productId", "==", window.selectedProduct.id)
-      .get();
-    
-    const purchases = purchaseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    purchases.sort((a, b) => {
-      const dateA = a.purchasedAt?.toDate?.() || new Date(0);
-      const dateB = b.purchasedAt?.toDate?.() || new Date(0);
-      return dateB - dateA;
-    });
-    
-    const purchase = purchases[0];
-    
-    if (purchase) {
-      document.getElementById("purchaseProductName").textContent = product.name;
-      document.getElementById("purchaseValue").textContent = formatIQD(product.value || product.price);
-      document.getElementById("purchaseCodeDisplay").textContent = purchase.code || "⚠️ لا يوجد كود";
-      
-      closeModal("productModal");
-      openModal("purchaseSuccessModal");
-      burstConfetti(30);
-      
-      const walletDoc = await walletRef.get();
-      document.querySelectorAll(".js-balance").forEach((el) => {
-        el.textContent = formatIQD(walletDoc.data().balance || 0);
-      });
-    }
-    
-    showToast("🛍️ تم شراء المنتج بنجاح!");
-    window.selectedProduct = null;
-    
-  } catch (error) {
-    console.error("confirmPurchase error:", error);
-    
-    const errorMessages = {
-      "insufficient-funds": "❌ رصيدك غير كافٍ",
-      "out-of-stock": "📦 المنتج غير متوفر حالياً",
-      "unauthenticated": "🔒 يجب تسجيل الدخول أولاً",
-      "product-not-found": "❌ المنتج غير موجود",
-      "user-not-found": "❌ المستخدم غير موجود",
-      "wallet-not-found": "❌ المحفظة غير موجودة"
-    };
-    
-    showToast(errorMessages[error.message] || "⚠️ تعذر إتمام الشراء: " + error.message, "error");
-  } finally {
-    hideLoader();
-  }
-}
-
-// ==============================================
-// 📦 تحميل سجل المشتريات
-// ==============================================
-
-async function loadPurchases() {
-  const container = document.getElementById("purchasesList");
-  if (!container || !auth.currentUser) return;
-  
-  showLoader();
-  
-  try {
-    const snapshot = await db.collection("purchases")
-      .where("userId", "==", auth.currentUser.uid)
-      .get();
-    
-    if (snapshot.empty) {
-      container.innerHTML = `<p class="empty-state">📦 لا توجد مشتريات بعد</p>`;
-      return;
-    }
-    
-    const purchases = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    purchases.sort((a, b) => {
-      const dateA = a.purchasedAt?.toDate?.() || new Date(0);
-      const dateB = b.purchasedAt?.toDate?.() || new Date(0);
-      return dateB - dateA;
-    });
-    
-    const icons = { "asia": "📱", "zain": "📱", "iqcard": "💳", "other": "🎁" };
-    
-    container.innerHTML = purchases.map((p) => {
-      const icon = icons[p.productType] || "🎁";
-      const isExpired = p.expiresAt && p.expiresAt.toDate && p.expiresAt.toDate() < new Date();
-      const status = isExpired ? 'منتهي' : 'نشط';
-      const statusClass = isExpired ? 'expired' : 'active';
-      const expiryDate = p.expiresAt ? formatDateTime(p.expiresAt) : '-';
-      
-      return `<div class="purchase-item">
-        <div class="pi-icon">${icon}</div>
-        <div class="pi-info">
-          <div class="pi-title">${p.productName || p.typeLabel || 'منتج'}</div>
-          <div class="pi-sub">${formatDateTime(p.purchasedAt)} · ${formatIQD(p.value || p.price)}</div>
-          <div class="pi-code">🔑 ${p.code || '⚠️ لا يوجد كود'}</div>
-          <div class="pi-expiry">⏳ تنتهي: ${expiryDate}</div>
-        </div>
-        <div style="text-align:left;display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-          <span class="pi-status ${statusClass}">${status}</span>
-          <button class="pill-btn pill-teal" onclick="copyToClipboard('${p.code || ''}')" style="font-size:10px;">📋 نسخ</button>
-        </div>
-      </div>`;
-    }).join("");
-    
-    attachRipple("#purchasesList .pill-btn");
-    
-  } catch (error) {
-    console.error("loadPurchases error:", error);
-    container.innerHTML = `<p class="empty-state">❌ تعذر تحميل المشتريات: ${error.message}</p>`;
-  } finally {
-    hideLoader();
-  }
-}
-
-// ==============================================
-// حسابي (Profile)
-// ==============================================
-async function loadProfile() {
-  if (!currentUserData) {
-    const user = auth.currentUser;
-    if (user) {
-      try {
-        const doc = await db.collection("users").doc(user.uid).get();
-        if (doc.exists) currentUserData = doc.data();
-      } catch (e) { /* ignore */ }
-    }
-    if (!currentUserData) return;
-  }
-  document.getElementById("profileName").textContent = currentUserData.name || "-";
-  document.getElementById("profileEmail").textContent = currentUserData.email || "-";
-  document.getElementById("profileWallet").textContent = currentWalletNumber || "-";
-  document.getElementById("profileJoinDate").textContent = formatDateTime(currentUserData.createdAt);
-}
-
-// ==============================================
-// ربط الأحداث (Event Listeners)
-// ==============================================
-document.addEventListener("DOMContentLoaded", () => {
-  initVisualEffects();
-  updateOnlineStatus();
-
-  document.getElementById("loginForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value;
-    if (!email || !password) {
-      showToast("⚠️ أدخل البريد وكلمة المرور", "error");
-      return;
-    }
-    loginUser(email, password);
-  });
-
-  document.getElementById("registerForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const name = document.getElementById("registerName").value.trim();
-    const email = document.getElementById("registerEmail").value.trim();
-    const password = document.getElementById("registerPassword").value;
-    const pin = document.getElementById("registerPin").value.trim();
-
-    if (name.length < 2) {
-      showToast("⚠️ الاسم يجب أن يكون حرفين على الأقل", "error");
-      return;
-    }
-    if (!email.includes('@')) {
-      showToast("⚠️ البريد الإلكتروني غير صحيح", "error");
-      return;
-    }
-    if (password.length < 6) {
-      showToast("⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل", "error");
-      return;
-    }
-    if (!/^\d{4,6}$/.test(pin)) {
-      showToast("⚠️ PIN يجب أن يكون 4 إلى 6 أرقام", "error");
-      return;
-    }
-
-    registerUser(name, email, password, pin);
-  });
-
-  document.getElementById("redeemForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (!navigator.onLine) { showToast("📡 لا يوجد اتصال بالإنترنت", "error"); return; }
-
-    const codeInput = document.getElementById("codeInput");
-    let code = codeInput.value.trim().toUpperCase();
-    if (!code) { showToast("⚠️ أدخل الكود أولاً", "error"); return; }
-
-    showLoader();
-    try {
-      await checkAndIncrementRedeemAttempt();
-
-      const result = await redeemCodeDirectly(code);
-      document.getElementById("successAmount").textContent = formatIQD(result.value);
-      openModal("successModal");
-      burstConfetti();
-      codeInput.value = "";
-      showToast("🎉 تم استرداد الكود بنجاح!");
-    } catch (error) {
-      console.error("redeem error:", error);
-      showToast(translateRedeemError(error.message), "error");
-    } finally {
-      hideLoader();
-      updateRedeemAttemptsUI();
-    }
-  });
-
-  document.getElementById("transferLookupForm").addEventListener("submit", (e) => { 
-    e.preventDefault(); 
-    lookupRecipient();
-  });
-  document.getElementById("transferConfirmForm").addEventListener("submit", (e) => { 
-    e.preventDefault(); 
-    executeTransfer();
-  });
-
-  document.getElementById("productSearch").addEventListener("input", (e) => {
-    const term = e.target.value.trim().toLowerCase();
-    document.querySelectorAll("#productsGrid .product-card").forEach((card) => {
-      const name = card.querySelector("h4")?.textContent?.toLowerCase() || "";
-      card.style.display = name.includes(term) ? "" : "none";
-    });
-  });
-
-  document.getElementById("logoutBtn").addEventListener("click", logout);
-
-  document.getElementById("changePinForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const currentPin = document.getElementById("currentPinInput").value.trim();
-    const newPin = document.getElementById("newPinInput").value.trim();
-    const confirmPin = document.getElementById("confirmPinInput").value.trim();
-    changePin(currentPin, newPin, confirmPin);
-  });
-
-  document.getElementById("resetPinForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const accountPassword = document.getElementById("resetAccountPassword").value;
-    const newPin = document.getElementById("resetNewPin").value.trim();
-    const confirmPin = document.getElementById("resetConfirmPin").value.trim();
-    resetPinWithPassword(accountPassword, newPin, confirmPin);
-  });
-
-  let authStateHandled = false;
-
-  auth.onAuthStateChanged(async (user) => {
-    if (isRegistering) return;
-
-    if (user) {
-      showLoader();
-      try {
-        await loadWalletData(user.uid);
-        listenToWalletBalance(currentWalletNumber);
-        navigateTo("home");
-        authStateHandled = true;
-        reclaimExpiredRedemptions();
-      } catch (err) {
-        console.error("❌ onAuthStateChanged error:", err);
-        setTimeout(async () => {
-          try {
-            await loadWalletData(user.uid);
-            listenToWalletBalance(currentWalletNumber);
-            navigateTo("home");
-            reclaimExpiredRedemptions();
-          } catch (e) {
-            showToast("❌ تعذر تحميل بيانات حسابك: " + (e.message || "خطأ غير معروف"), "error");
-            auth.signOut();
-          }
-        }, 3000);
-      } finally {
-        hideLoader();
-      }
-    } else {
-      currentWalletNumber = null;
-      currentUserData = null;
-      if (!authStateHandled) {
-        navigateTo("login");
-      }
-    }
-  });
 });
+
+
+/* إذا انقطع */
+
+window.addEventListener("offline", function() {
+
+    disconnected();
+
+});
+
+
+/*
+فحص تلقائي كل 5 ثواني
+*/
+
+setInterval(function() {
+
+    checkConnection();
+
+}, 5000);
+
 </script>
+
 </body>
 </html>
