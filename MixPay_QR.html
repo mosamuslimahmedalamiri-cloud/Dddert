@@ -229,6 +229,23 @@ input { font-family: inherit; }
 .divider hr { border: 1px solid rgba(255,255,255,0.08); }
 .divider span { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 10px; color: var(--text-muted); font-size: 12px; }
 
+/* ============ شاشة عدم الاتصال بالإنترنت ============ */
+.offline-overlay { position: fixed; inset: 0; z-index: 500; display: none; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 40px 30px; background: radial-gradient(circle at 30% 20%, rgba(123,108,246,0.14), transparent 55%), radial-gradient(circle at 80% 85%, rgba(63,214,198,0.12), transparent 55%), var(--bg); }
+.offline-overlay.visible { display: flex; }
+.offline-card { max-width: 340px; width: 100%; }
+.offline-icon-wrap { width: 96px; height: 96px; border-radius: 50%; background: var(--grad-mix); display: flex; align-items: center; justify-content: center; font-size: 42px; margin: 0 auto 22px; box-shadow: 0 18px 40px rgba(123,108,246,0.35), 0 2px 0 rgba(255,255,255,0.12) inset; position: relative; }
+.offline-icon-wrap::after { content: ""; position: absolute; inset: -10px; border-radius: 50%; border: 1px solid rgba(63,214,198,0.35); animation: offlinePulse 2.2s ease-out infinite; }
+.offline-icon-wrap::before { content: ""; position: absolute; inset: -22px; border-radius: 50%; border: 1px solid rgba(123,108,246,0.2); animation: offlinePulse 2.2s ease-out infinite .4s; }
+@keyframes offlinePulse { 0% { transform: scale(0.85); opacity: 0.8; } 100% { transform: scale(1.35); opacity: 0; } }
+.offline-title { font-family: var(--font-display); font-weight: 900; font-size: 21px; margin-bottom: 10px; }
+.offline-text { color: var(--text-secondary); font-size: 13.5px; line-height: 1.85; margin-bottom: 26px; }
+.offline-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 26px; }
+.offline-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--mix-teal); opacity: .35; animation: offlineDot 1.4s ease-in-out infinite; }
+.offline-dots span:nth-child(2) { animation-delay: .2s; }
+.offline-dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes offlineDot { 0%, 100% { opacity: .35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
+.offline-brand { font-family: var(--font-display); font-weight: 900; font-size: 22px; background: var(--grad-mix); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 30px; letter-spacing: .5px; }
+
 @media (min-width: 600px) {
   .app-container { max-width: 600px; border-inline: 1px solid rgba(255,255,255,0.05); }
   .bottom-nav { max-width: 600px; }
@@ -407,13 +424,16 @@ input { font-family: inherit; }
       <p style="color:var(--text-secondary);font-size:13.5px;margin-top:8px;">
         أدخل كود المنتج الموجود على عبوتك لإضافة قيمته إلى محفظتك مباشرة.
       </p>
+      <p style="color:var(--gold);font-size:11.5px;margin-top:6px;">
+        ⏳ الرصيد الناتج عن الأكواد صالح للاستخدام لمدة شهرين من تاريخ الإضافة، وبعدها يتم استرداده تلقائياً.
+      </p>
+      <p id="redeemAttemptsInfo" style="font-size:11.5px;color:var(--mix-teal);font-weight:700;margin-top:10px;">🔢 المحاولات المتبقية اليوم: -- من 10</p>
     </div>
     <form class="form-page" id="redeemForm" style="padding-top:0;">
       <div class="form-group">
         <label>كود MixPay</label>
-        <input type="text" id="codeInput" placeholder="MXP-XXXX-XXXX" style="text-align:center;letter-spacing:2px;font-weight:700;" required />
+        <input type="text" id="codeInput" placeholder="مثال: A7K9-QW3R-X2P5" style="text-align:center;letter-spacing:2px;font-weight:700;font-family:monospace;" required />
       </div>
-      <button type="button" class="btn-secondary" id="openQrScannerBtn" style="margin-bottom:10px;">📷 مسح QR بالكاميرا</button>
       <button type="submit" class="btn-primary">تحقق واستلم المكافأة</button>
     </form>
   </section>
@@ -493,17 +513,6 @@ input { font-family: inherit; }
 
 </div>
 
-<!-- ============ قارئ QR ============ -->
-<div class="modal-overlay" id="qrScannerModal">
-  <div class="modal-sheet" style="text-align:center;">
-    <div class="modal-handle"></div>
-    <div class="modal-title">📷 مسح كود QR</div>
-    <p id="qrScannerStatus" style="color:var(--text-secondary);font-size:12.5px;margin-bottom:12px;">وجّه الكاميرا نحو رمز QR</p>
-    <div id="qrReader" style="width:100%;max-width:420px;margin:0 auto;overflow:hidden;border-radius:16px;background:#000;min-height:280px;"></div>
-    <button type="button" class="btn-secondary" style="margin-top:12px;" onclick="closeQrScanner()">إغلاق</button>
-  </div>
-</div>
-
 <!-- ============ نافذة: نجاح استبدال الكود ============ -->
 <div class="modal-overlay" id="successModal">
   <div class="modal-sheet" style="text-align:center;">
@@ -512,7 +521,8 @@ input { font-family: inherit; }
     <div class="modal-title">مبروك!</div>
     <p style="color:var(--text-secondary);font-size:14px;margin-bottom:6px;">تمت إضافة</p>
     <div class="wallet-balance" id="successAmount" style="font-size:28px;color:var(--gold);">0 د.ع</div>
-    <p style="color:var(--text-secondary);font-size:14px;margin:6px 0 20px;">إلى محفظتك</p>
+    <p style="color:var(--text-secondary);font-size:14px;margin:6px 0 6px;">إلى محفظتك</p>
+    <p style="color:var(--gold);font-size:11.5px;margin-bottom:20px;">⏳ هذا الرصيد صالح لمدة شهرين من اليوم، وبعدها سيتم استرداده تلقائياً إن لم يُستخدم.</p>
     <button class="btn-primary" onclick="closeModal('successModal')">تم</button>
   </div>
 </div>
@@ -672,7 +682,17 @@ input { font-family: inherit; }
   </div>
 </div>
 
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<!-- ============ شاشة عدم الاتصال بالإنترنت ============ -->
+<div class="offline-overlay" id="offlineOverlay">
+  <div class="offline-card">
+    <div class="offline-brand">MixPay</div>
+    <div class="offline-icon-wrap">📡</div>
+    <div class="offline-title">لا يوجد اتصال بالإنترنت</div>
+    <p class="offline-text">يبدو أنك غير متصل بالشبكة حالياً. تحقق من اتصال الواي فاي أو بيانات الجوال، ثم أعد المحاولة للمتابعة داخل محفظتك.</p>
+    <div class="offline-dots"><span></span><span></span><span></span></div>
+    <button class="btn-primary" onclick="checkConnection()">🔄 إعادة المحاولة</button>
+  </div>
+</div>
 
 <!-- ============ Firebase SDK ============ -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -711,7 +731,7 @@ function showToast(message, type = "success") {
     document.body.appendChild(container);
   }
   const toast = document.createElement("div");
-  toast.className = `toast toast-${type}`;
+  toast.className = `toast ${type === "error" ? "toast-error" : ""}`;
   toast.textContent = message;
   container.appendChild(toast);
   requestAnimationFrame(() => toast.classList.add("show"));
@@ -805,6 +825,26 @@ function formatDateTime(timestamp) {
 }
 
 // ==============================================
+// 📡 كشف حالة الاتصال بالإنترنت
+// ==============================================
+function updateOnlineStatus() {
+  const overlay = document.getElementById("offlineOverlay");
+  if (!overlay) return;
+  if (navigator.onLine) {
+    overlay.classList.remove("visible");
+  } else {
+    overlay.classList.add("visible");
+  }
+}
+function checkConnection() {
+  updateOnlineStatus();
+  if (navigator.onLine) showToast("✅ تم استعادة الاتصال بالإنترنت");
+  else showToast("📡 لا يزال الاتصال منقطعاً، حاول لاحقاً", "error");
+}
+window.addEventListener("online", () => { updateOnlineStatus(); showToast("✅ تم الاتصال بالإنترنت مجدداً"); });
+window.addEventListener("offline", () => { updateOnlineStatus(); });
+
+// ==============================================
 // نظام التنقل بين الشاشات
 // ==============================================
 const MAIN_VIEWS = ["home", "wallet", "transfer", "redeem", "store", "profile", "purchases"];
@@ -829,6 +869,7 @@ function navigateTo(viewName) {
   if (viewName === "store") { loadProducts("productsGrid", false); }
   if (viewName === "purchases") { loadPurchases(); }
   if (viewName === "profile") { loadProfile(); }
+  if (viewName === "redeem") { updateRedeemAttemptsUI(); }
 
   window.scrollTo(0, 0);
   setTimeout(initVisualEffects, 60);
@@ -1130,15 +1171,16 @@ async function loadTransactions(listElId, limit = 20) {
 
     if (snapshot.empty) { listEl.innerHTML = `<p class="empty-state">📭 لا توجد عمليات بعد</p>`; return; }
 
-    const icons = { REDEEM: "🎁", TRANSFER_OUT: "🔄", TRANSFER_IN: "💸", FEE: "💵", STORE_PURCHASE: "🛍️" };
-    const labels = { REDEEM: "مكافأة كود", TRANSFER_OUT: "تحويل صادر", TRANSFER_IN: "تحويل وارد", FEE: "رسوم تحويل", STORE_PURCHASE: "شراء من المتجر" };
+    const icons = { REDEEM: "🎁", TRANSFER_OUT: "🔄", TRANSFER_IN: "💸", FEE: "💵", STORE_PURCHASE: "🛍️", EXPIRY_RECLAIM: "⏳" };
+    const labels = { REDEEM: "مكافأة كود", TRANSFER_OUT: "تحويل صادر", TRANSFER_IN: "تحويل وارد", FEE: "رسوم تحويل", STORE_PURCHASE: "شراء من المتجر", EXPIRY_RECLAIM: "استرداد رصيد منتهي" };
 
     listEl.innerHTML = snapshot.docs.map((doc) => {
       const t = doc.data();
       const isPositive = ["REDEEM", "TRANSFER_IN"].includes(t.type);
+      const expiryLine = (t.type === "REDEEM" && t.expiresAt) ? `<span class="tx-date" style="color:var(--gold);">⏳ ينتهي: ${formatDateTime(t.expiresAt)}</span>` : "";
       return `<div class="transaction-item">
         <div class="tx-icon">${icons[t.type] || "📄"}</div>
-        <div class="tx-info"><span class="tx-title">${labels[t.type] || t.type}</span><span class="tx-date">${formatDateTime(t.createdAt)}</span></div>
+        <div class="tx-info"><span class="tx-title">${labels[t.type] || t.type}</span><span class="tx-date">${formatDateTime(t.createdAt)}</span>${expiryLine}</div>
         <div class="tx-amount ${isPositive ? "positive" : "negative"}">${isPositive ? "+" : "-"}${formatIQD(t.amount)}</div>
       </div>`;
     }).join("");
@@ -1149,15 +1191,84 @@ async function loadTransactions(listElId, limit = 20) {
 }
 
 // ==============================================
-// 🔧 استرداد كود
+// 🔢 الحد اليومي لمحاولات إدخال الأكواد (10 محاولات/يوم)
+// ==============================================
+const DAILY_CODE_LIMIT = 10;
+
+function getTodayDateStr() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+async function checkAndIncrementRedeemAttempt() {
+  if (!auth.currentUser) throw new Error("unauthenticated");
+  const today = getTodayDateStr();
+  const limitRef = db.collection("redeemAttempts").doc(auth.currentUser.uid + "_" + today);
+
+  await db.runTransaction(async (transaction) => {
+    const doc = await transaction.get(limitRef);
+    let count = 0;
+    if (doc.exists && doc.data().date === today) {
+      count = doc.data().count || 0;
+    }
+    if (count >= DAILY_CODE_LIMIT) {
+      throw new Error("daily-limit-reached");
+    }
+    count += 1;
+    transaction.set(limitRef, {
+      uid: auth.currentUser.uid,
+      date: today,
+      count: count,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+  });
+}
+
+async function getRemainingRedeemAttempts() {
+  if (!auth.currentUser) return DAILY_CODE_LIMIT;
+  const today = getTodayDateStr();
+  try {
+    const doc = await db.collection("redeemAttempts").doc(auth.currentUser.uid + "_" + today).get();
+    if (doc.exists && doc.data().date === today) {
+      return Math.max(0, DAILY_CODE_LIMIT - (doc.data().count || 0));
+    }
+  } catch (e) { console.error("getRemainingRedeemAttempts error:", e); }
+  return DAILY_CODE_LIMIT;
+}
+
+async function updateRedeemAttemptsUI() {
+  const el = document.getElementById("redeemAttemptsInfo");
+  if (!el) return;
+  const remaining = await getRemainingRedeemAttempts();
+  el.textContent = `🔢 المحاولات المتبقية اليوم: ${remaining} من ${DAILY_CODE_LIMIT}`;
+}
+
+// ==============================================
+// 🎟️ توليد الأكواد - 12 حرف (XXXX-XXXX-XXXX)
+// ==============================================
+function generateCodeString() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const part = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  return `${part()}-${part()}-${part()}`;
+}
+
+// ==============================================
+// 🔧 استرداد كود (يدعم الصيغتين)
 // ==============================================
 async function redeemCodeDirectly(code) {
     if (!auth.currentUser) {
         throw new Error('unauthenticated');
     }
 
+    // ✅ تنظيف الكود: إزالة بادئة MXP- إذا كانت موجودة
+    let cleanCode = code.toUpperCase().trim();
+    if (cleanCode.startsWith("MXP-")) {
+        cleanCode = cleanCode.substring(4);
+    }
+
+    // ✅ البحث عن الكود بالصيغة النظيفة
     const snapshot = await db.collection('codes')
-        .where('code', '==', code)
+        .where('code', '==', cleanCode)
         .limit(1)
         .get();
 
@@ -1179,6 +1290,9 @@ async function redeemCodeDirectly(code) {
 
     const walletNumber = userDoc.data().walletId.split('/')[1];
     const walletRef = db.collection('wallets').doc(walletNumber);
+
+    const expiresAt = new Date();
+    expiresAt.setMonth(expiresAt.getMonth() + 2);
 
     await db.runTransaction(async (transaction) => {
         const walletDoc = await transaction.get(walletRef);
@@ -1204,11 +1318,13 @@ async function redeemCodeDirectly(code) {
             type: 'REDEEM',
             amount: codeData.value,
             code: code,
+            expiresAt: expiresAt,
+            reclaimed: false,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
     });
 
-    return { value: codeData.value };
+    return { value: codeData.value, expiresAt };
 }
 
 function translateRedeemError(message) {
@@ -1217,9 +1333,91 @@ function translateRedeemError(message) {
         "already-used": "⚠️ هذا الكود مستخدم من قبل",
         "unauthenticated": "🔒 يجب تسجيل الدخول أولاً",
         "user-not-found": "❌ المستخدم غير موجود",
-        "wallet-not-found": "❌ المحفظة غير موجودة"
+        "wallet-not-found": "❌ المحفظة غير موجودة",
+        "daily-limit-reached": "🚫 لقد استخدمت الحد الأقصى (10 محاولات) لهذا اليوم، حاول غداً"
     };
     return map[message] || "⚠️ تعذر التحقق من الكود";
+}
+
+// ==============================================
+// ⏳ استرداد الرصيد بعد انتهاء صلاحيته (شهرين من تاريخ إدخال الكود)
+// ==============================================
+async function reclaimExpiredRedemptions() {
+  if (!auth.currentUser) return;
+  try {
+    const snapshot = await db.collection("transactions")
+      .where("uid", "==", auth.currentUser.uid)
+      .where("type", "==", "REDEEM")
+      .where("reclaimed", "==", false)
+      .get();
+
+    if (snapshot.empty) return;
+
+    const now = new Date();
+    const expiredDocs = snapshot.docs.filter((doc) => {
+      const data = doc.data();
+      if (!data.expiresAt) return false;
+      const expiry = data.expiresAt.toDate ? data.expiresAt.toDate() : new Date(data.expiresAt);
+      return expiry <= now;
+    });
+
+    if (expiredDocs.length === 0) return;
+
+    const userDoc = await db.collection("users").doc(auth.currentUser.uid).get();
+    if (!userDoc.exists) return;
+    const walletNumber = userDoc.data().walletId.split("/")[1];
+    const walletRef = db.collection("wallets").doc(walletNumber);
+
+    let reclaimedCount = 0;
+
+    for (const doc of expiredDocs) {
+      const data = doc.data();
+      try {
+        await db.runTransaction(async (transaction) => {
+          const walletSnap = await transaction.get(walletRef);
+          if (!walletSnap.exists) return;
+          const currentBalance = walletSnap.data().balance || 0;
+          const reclaimAmount = Math.min(data.amount || 0, currentBalance);
+
+          if (reclaimAmount > 0) {
+            transaction.update(walletRef, {
+              balance: currentBalance - reclaimAmount,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          }
+
+          transaction.update(doc.ref, {
+            reclaimed: true,
+            reclaimedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            reclaimedAmount: reclaimAmount
+          });
+
+          if (reclaimAmount > 0) {
+            const rxRef = db.collection("transactions").doc();
+            transaction.set(rxRef, {
+              uid: auth.currentUser.uid,
+              walletNumber: walletNumber,
+              type: "EXPIRY_RECLAIM",
+              amount: reclaimAmount,
+              relatedCode: data.code || null,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          }
+        });
+        reclaimedCount++;
+      } catch (innerError) {
+        console.error("reclaim single item error:", innerError);
+      }
+    }
+
+    if (reclaimedCount > 0) {
+      showToast(`⏳ انتهت صلاحية ${reclaimedCount} من رصيد الأكواد (بعد شهرين) وتم استرداده`, "error");
+      loadTransactions("homeTransactionsList", 5);
+      loadTransactions("walletTransactionsList", 50);
+    }
+  } catch (e) {
+    console.error("reclaimExpiredRedemptions error:", e);
+  }
 }
 
 // ==============================================
@@ -1427,7 +1625,6 @@ async function openProductModal(productId) {
       return;
     }
     
-    // حفظ المنتج المختار مؤقتاً
     window.selectedProduct = { id: productId, ...product };
     
     document.getElementById("productModalName").textContent = product.name;
@@ -1443,7 +1640,6 @@ async function openProductModal(productId) {
   }
 }
 
-// دالة شراء المنتج (نسخة معدلة بدون orderBy)
 async function confirmPurchase() {
   if (!window.selectedProduct) {
     showToast("❌ حدث خطأ، حاول مرة أخرى", "error");
@@ -1478,7 +1674,6 @@ async function confirmPurchase() {
       throw new Error("out-of-stock");
     }
     
-    // تنفيذ المعاملة
     await db.runTransaction(async (transaction) => {
       const walletDoc = await transaction.get(walletRef);
       if (!walletDoc.exists) {
@@ -1532,13 +1727,11 @@ async function confirmPurchase() {
       });
     });
     
-    // ✅ عرض الكود للمستخدم (بدون orderBy)
     const purchaseSnapshot = await db.collection("purchases")
       .where("userId", "==", auth.currentUser.uid)
       .where("productId", "==", window.selectedProduct.id)
       .get();
     
-    // ✅ ترتيب النتائج يدوياً
     const purchases = purchaseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     purchases.sort((a, b) => {
       const dateA = a.purchasedAt?.toDate?.() || new Date(0);
@@ -1585,7 +1778,7 @@ async function confirmPurchase() {
 }
 
 // ==============================================
-// 📦 تحميل سجل المشتريات (بدون orderBy)
+// 📦 تحميل سجل المشتريات
 // ==============================================
 
 async function loadPurchases() {
@@ -1595,7 +1788,6 @@ async function loadPurchases() {
   showLoader();
   
   try {
-    // ✅ استعلام بدون orderBy (لا يحتاج إلى فهرس)
     const snapshot = await db.collection("purchases")
       .where("userId", "==", auth.currentUser.uid)
       .get();
@@ -1605,12 +1797,11 @@ async function loadPurchases() {
       return;
     }
     
-    // ✅ ترتيب النتائج يدوياً في JavaScript
     const purchases = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     purchases.sort((a, b) => {
       const dateA = a.purchasedAt?.toDate?.() || new Date(0);
       const dateB = b.purchasedAt?.toDate?.() || new Date(0);
-      return dateB - dateA; // الأحدث أولاً
+      return dateB - dateA;
     });
     
     const icons = { "asia": "📱", "zain": "📱", "iqcard": "💳", "other": "🎁" };
@@ -1672,6 +1863,7 @@ async function loadProfile() {
 // ==============================================
 document.addEventListener("DOMContentLoaded", () => {
   initVisualEffects();
+  updateOnlineStatus();
 
   document.getElementById("loginForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -1713,12 +1905,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("redeemForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    if (!navigator.onLine) { showToast("📡 لا يوجد اتصال بالإنترنت", "error"); return; }
+
     const codeInput = document.getElementById("codeInput");
-    const code = codeInput.value.trim().toUpperCase();
+    let code = codeInput.value.trim().toUpperCase();
     if (!code) { showToast("⚠️ أدخل الكود أولاً", "error"); return; }
 
     showLoader();
     try {
+      await checkAndIncrementRedeemAttempt();
+
       const result = await redeemCodeDirectly(code);
       document.getElementById("successAmount").textContent = formatIQD(result.value);
       openModal("successModal");
@@ -1730,6 +1927,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showToast(translateRedeemError(error.message), "error");
     } finally {
       hideLoader();
+      updateRedeemAttemptsUI();
     }
   });
 
@@ -1780,6 +1978,7 @@ document.addEventListener("DOMContentLoaded", () => {
         listenToWalletBalance(currentWalletNumber);
         navigateTo("home");
         authStateHandled = true;
+        reclaimExpiredRedemptions();
       } catch (err) {
         console.error("❌ onAuthStateChanged error:", err);
         setTimeout(async () => {
@@ -1787,6 +1986,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await loadWalletData(user.uid);
             listenToWalletBalance(currentWalletNumber);
             navigateTo("home");
+            reclaimExpiredRedemptions();
           } catch (e) {
             showToast("❌ تعذر تحميل بيانات حسابك: " + (e.message || "خطأ غير معروف"), "error");
             auth.signOut();
@@ -1804,6 +2004,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-</script\n<script>\n// ==============================================\n// MixPay - قارئ QR بالكاميرا\n// ==============================================\nlet mixPayQrScanner = null;\nlet qrScannerRunning = false;\n\nasync function openQrScanner() {\n  const modal = document.getElementById('qrScannerModal');\n  const reader = document.getElementById('qrReader');\n  const status = document.getElementById('qrScannerStatus');\n  if (!modal || !reader) return;\n\n  openModal('qrScannerModal');\n  status.textContent = 'جاري تشغيل الكاميرا...';\n  reader.innerHTML = '';\n\n  if (typeof Html5Qrcode === 'undefined') {\n    status.textContent = 'تعذر تحميل قارئ QR. تأكد من اتصال الإنترنت.';\n    return;\n  }\n\n  try {\n    mixPayQrScanner = new Html5Qrcode('qrReader');\n    await mixPayQrScanner.start(\n      { facingMode: 'environment' },\n      {\n        fps: 10,\n        qrbox: { width: 230, height: 230 },\n        aspectRatio: 1.0\n      },\n      (decodedText) => {\n        const input = document.getElementById('codeInput');\n        if (input) {\n          input.value = decodedText.trim();\n          input.dispatchEvent(new Event('input', { bubbles: true }));\n        }\n        status.textContent = '✅ تم قراءة الكود بنجاح';\n        setTimeout(closeQrScanner, 500);\n      },\n      () => {}\n    );\n    qrScannerRunning = true;\n    status.textContent = 'وجّه الكاميرا نحو رمز QR';\n  } catch (err) {\n    console.error('QR scanner error:', err);\n    status.textContent = '❌ تعذر تشغيل الكاميرا. اسمح للموقع/التطبيق باستخدام الكاميرا.';\n  }\n}\n\nasync function closeQrScanner() {\n  try {\n    if (mixPayQrScanner && qrScannerRunning) {\n      await mixPayQrScanner.stop();\n      await mixPayQrScanner.clear();\n    }\n  } catch (e) {\n    console.warn('QR stop error:', e);\n  } finally {\n    qrScannerRunning = false;\n    mixPayQrScanner = null;\n    closeModal('qrScannerModal');\n    const reader = document.getElementById('qrReader');\n    if (reader) reader.innerHTML = '';\n  }\n}\n\ndocument.addEventListener('DOMContentLoaded', () => {\n  const btn = document.getElementById('openQrScannerBtn');\n  if (btn) btn.addEventListener('click', openQrScanner);\n\n  const modal = document.getElementById('qrScannerModal');\n  if (modal) modal.addEventListener('click', (e) => {\n    if (e.target === modal) closeQrScanner();\n  });\n});\n\nwindow.addEventListener('pagehide', () => {\n  if (mixPayQrScanner && qrScannerRunning) {\n    mixPayQrScanner.stop().catch(() => {});\n  }\n});\n</script>\n>
+</script>
 </body>
 </html>
