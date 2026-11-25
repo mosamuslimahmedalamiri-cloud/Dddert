@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fbf7fa">
+<title>A-STORE ✦</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet" href="assets/store.css">
+</head>
+<body class="theme-pink">
+
+<!-- ══ TOP BAR ══ -->
+<div class="top-stack">
+  <div class="ad-banner" id="adBanner">
+    <div class="banner-inner bm-marquee" id="bannerInner">
+      <div class="banner-track" id="bannerTrack"></div>
+    </div>
+  </div>
+
+  <header class="app-header">
+    <div class="brand-logo">A-STORE ✦</div>
+    <div class="header-icons">
+      <button class="icon-btn" onclick="focusSearch()" aria-label="بحث"><i class="fa fa-search"></i></button>
+    </div>
+  </header>
+</div>
+
+<main>
+
+<!-- ① HOME -->
+<div id="p-home" class="page-node active">
+  <div class="search-bar">
+    <div class="search-field">
+      <i class="fa fa-search search-ico"></i>
+      <input class="search-input" id="searchInput" type="search" inputmode="search" placeholder="ابحث عن منتج..." oninput="onSearchInput()">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="مسح البحث"><i class="fa fa-times"></i></button>
+    </div>
+  </div>
+
+  <div id="searchResultsWrap" style="display:none">
+    <div style="padding:12px var(--sp) 2px;font-size:.8rem;font-weight:800;color:var(--text-2)" id="searchResultsLabel"></div>
+    <div class="products-grid" id="searchResultsList"></div>
+  </div>
+
+  <div id="homeMainContent">
+    <div class="store-hero">
+      <div class="store-hero-text">
+        <span class="store-hero-chip"><i class="fa fa-bolt"></i> توصيل سريع</span>
+        <div class="store-hero-title">مرحباً بك في متجرنا ✨</div>
+        <div class="store-hero-sub">اكتشف أحدث المنتجات والعروض المميزة</div>
+      </div>
+      <div class="store-hero-emoji">🛍️</div>
+    </div>
+
+    <!-- العروض الحصرية -->
+    <div id="adCardsSection" style="display:none">
+      <div class="ad-section">
+        <div class="ad-section-header">
+          <div class="ad-section-title"><i class="fa fa-fire"></i> العروض الحصرية</div>
+          <div class="ad-dot-indicators" id="adDotIndicators"></div>
+        </div>
+        <div class="ad-hscroll" id="adCardsList" onscroll="updateAdDots(this)"></div>
+      </div>
+    </div>
+
+    <!-- الأكثر طلباً -->
+    <div class="home-section" id="mostOrderedSection" style="display:none">
+      <div class="home-section-header">
+        <div class="home-section-title"><i class="fa fa-crown" style="color:#f59e0b"></i> الأكثر طلباً</div>
+        <div class="home-section-more" onclick="navTo('p-cats',1)">عرض الكل <i class="fa fa-chevron-left"></i></div>
+      </div>
+      <div class="hcs-scroll" id="mostOrderedScroll"></div>
+    </div>
+
+    <!-- أحدث المنتجات -->
+    <div class="home-section" id="latestSection" style="display:none">
+      <div class="home-section-header">
+        <div class="home-section-title"><i class="fa fa-clock" style="color:#10b981"></i> أحدث المنتجات</div>
+        <div class="home-section-more" onclick="navTo('p-cats',1)">عرض الكل <i class="fa fa-chevron-left"></i></div>
+      </div>
+      <div class="hcs-scroll" id="latestProdsScroll"></div>
+    </div>
+
+    <!-- قد يعجبك -->
+    <div class="home-section" id="randomSection" style="display:none">
+      <div class="home-section-header">
+        <div class="home-section-title"><i class="fa fa-star" style="color:var(--main)"></i> قد يعجبك</div>
+        <div class="home-section-more" onclick="navTo('p-cats',1)">عرض الكل <i class="fa fa-chevron-left"></i></div>
+      </div>
+      <div class="products-grid" id="randomProdsGrid"></div>
+      <div class="home-more-btn-wrap">
+        <button class="home-more-btn" onclick="navTo('p-cats',1)"><i class="fa fa-store"></i> تصفح جميع المنتجات</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ② CATEGORIES -->
+<div id="p-cats" class="page-node">
+  <div class="page-head">
+    <h2>🏷️ جميع الفئات</h2>
+    <span id="allCatsCountLabel"></span>
+  </div>
+  <div class="cats-grid" id="storeCatsGrid"></div>
+</div>
+
+<!-- ③ CATEGORY PRODUCTS -->
+<div id="p-cat-prods" class="cat-prods-page">
+  <div class="cat-prods-hero" id="catProdsHero">
+    <img class="cat-prods-hero-bg" id="catProdsHeroBg" alt="" onerror="this.style.display='none'">
+    <div class="cat-prods-hero-overlay"></div>
+    <button class="cat-prods-back" onclick="navBack()" aria-label="رجوع"><i class="fa fa-arrow-right"></i></button>
+    <div class="cat-prods-hero-body">
+      <div class="cat-prods-hero-icon" id="catProdsHeroIcon">🏷️</div>
+      <div class="cat-prods-hero-name" id="catProdsHeroName">الفئة</div>
+      <div class="cat-prods-hero-desc" id="catProdsHeroDesc"></div>
+      <div class="cat-prods-hero-badge"><i class="fa fa-box"></i> <span id="catProdsHeroCount">0</span> منتج</div>
+    </div>
+  </div>
+  <div class="cat-toolbar">
+    <div class="cat-toolbar-label" id="catProdsSubLabel">جميع المنتجات</div>
+    <div class="cat-sorts">
+      <div class="cat-sort-btn active" onclick="setCatSort('all',this)">الكل</div>
+      <div class="cat-sort-btn" onclick="setCatSort('low',this)">السعر ↑</div>
+      <div class="cat-sort-btn" onclick="setCatSort('high',this)">السعر ↓</div>
+    </div>
+  </div>
+  <div class="products-grid" id="catProdsList"></div>
+</div>
+
+<!-- ④ PRODUCT DETAIL -->
+<div id="p-product" class="cat-prods-page">
+  <div id="prodDetailContent"></div>
+</div>
+
+<!-- ⑤ REELS -->
+<div id="p-reels" class="page-node">
+  <div class="reels-wrapper" id="reelsList"></div>
+</div>
+
+<!-- ⑥ CART -->
+<div id="p-cart" class="page-node">
+  <div class="cart-header-bar">
+    <h2>سلة التسوق</h2>
+    <div class="cart-count-badge" id="cartItemsCount">0</div>
+  </div>
+
+  <div class="promo-bar" id="promoBar">
+    <div class="promo-card pc-ship" id="promoShipCard" style="display:none">
+      <div class="promo-top">
+        <div class="promo-icon">🚚</div>
+        <div class="promo-info">
+          <div class="promo-title" id="promoShipTitle">أضف المزيد للتوصيل المجاني</div>
+          <div class="promo-sub" id="promoShipSub">باقي ... د.ع</div>
+        </div>
+        <span class="promo-badge pb-green" id="promoShipBadge">مجاني</span>
+      </div>
+      <div class="liquid-wrap">
+        <div class="liquid-fill lf-green" id="liquidShipFill" style="width:0%"><div class="liquid-sheen"></div></div>
+        <div class="liquid-pct" id="liquidShipPct">0%</div>
+      </div>
+    </div>
+    <div class="promo-card pc-disc" id="promoDiscCard" style="display:none">
+      <div class="promo-top">
+        <div class="promo-icon">🏷️</div>
+        <div class="promo-info">
+          <div class="promo-title" id="promoDiscTitle">أضف المزيد للحصول على خصم</div>
+          <div class="promo-sub" id="promoDiscSub">باقي ... د.ع</div>
+        </div>
+        <span class="promo-badge pb-yellow" id="promoDiscBadge">خصم</span>
+      </div>
+      <div class="liquid-wrap">
+        <div class="liquid-fill lf-yellow" id="liquidDiscFill" style="width:0%"><div class="liquid-sheen"></div></div>
+        <div class="liquid-pct" id="liquidDiscPct">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-list" id="cartItemsDisplay"></div>
+  <div id="emptyCart" style="display:none" class="empty-cart-view">
+    <div class="empty-cart-icon">🛒</div>
+    <div class="empty-cart-text">السلة فارغة.. ابدأ التسوق!</div>
+  </div>
+
+  <div class="checkout-box" id="cartFooter" style="display:none">
+    <div class="fee-row"><span>المنتجات</span><b id="subPrice">0 د.ع</b></div>
+    <div class="disc-line" id="discRow" style="display:none"><span>🏷️ خصم مطبّق</span><b id="discAmount">-0 د.ع</b></div>
+    <div class="fee-row"><span>التوصيل</span><b id="deliveryFee">يحدد عند الطلب</b></div>
+    <div class="total-row"><span>الإجمالي</span><b id="grandTotal">0 د.ع</b></div>
+    <button class="place-order-btn" onclick="openOrderModal()"><i class="fa fa-clipboard-list"></i> إتمام الطلب</button>
+  </div>
+</div>
+
+<!-- ⑦ PROFILE -->
+<div id="p-profile" class="page-node">
+  <div class="profile-container">
+    <div class="user-hero">
+      <div class="user-avatar"><i class="fa fa-user-astronaut"></i></div>
+      <h3 id="displayName">مرحباً بك 👋</h3>
+      <p>A-STORE V1</p>
+    </div>
+
+    <div class="info-card">
+      <h4><i class="fa fa-id-card" style="color:var(--main)"></i> معلومات الشحن</h4>
+      <input class="form-input" type="text" id="uName" placeholder="الاسم الكامل" style="margin-bottom:10px">
+      <input class="form-input" type="tel" id="uPhone" placeholder="رقم الهاتف (واتساب)" style="margin-bottom:10px">
+      <input class="form-input" type="text" id="uAddr" placeholder="العنوان الدقيق" style="margin-bottom:14px">
+      <button class="save-btn" onclick="saveProfile()"><i class="fa fa-check-circle"></i> حفظ البيانات</button>
+    </div>
+
+    <div class="info-card">
+      <h4><i class="fa fa-palette" style="color:var(--main)"></i> اختر الثيم</h4>
+      <div class="themes-grid">
+        <div class="theme-dot-btn t-pink active" onclick="setTheme('pink')"><div class="theme-dot"></div><span class="theme-dot-label">وردي</span></div>
+        <div class="theme-dot-btn t-snow" onclick="setTheme('snow')"><div class="theme-dot"></div><span class="theme-dot-label">ثلجي</span></div>
+        <div class="theme-dot-btn t-emerald" onclick="setTheme('emerald')"><div class="theme-dot"></div><span class="theme-dot-label">زمردي</span></div>
+        <div class="theme-dot-btn t-black" onclick="setTheme('black')"><div class="theme-dot"></div><span class="theme-dot-label">أسود</span></div>
+        <div class="theme-dot-btn t-royal" onclick="setTheme('royal')"><div class="theme-dot"></div><span class="theme-dot-label">ملكي</span></div>
+      </div>
+    </div>
+
+    <a href="https://whatsapp.com/channel/0029VbC6sZiI1rciftWQp23A" target="_blank" rel="noopener" class="wa-card">
+      <div>
+        <h3>انضم لقناتنا 📢</h3>
+        <p>تابع أحدث العروض والخصومات</p>
+      </div>
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <a href="MixPay_QR.html" class="mini-link"><i class="fa fa-calculator"></i> حاسبة MixPay</a>
+  </div>
+</div>
+
+</main>
+
+<!-- ORDER MODAL -->
+<div class="order-modal-bg" id="orderModal" onclick="if(event.target===this)closeOrderModal()">
+  <div class="order-modal" role="dialog" aria-modal="true" aria-label="تفاصيل الطلب">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🛍️ تفاصيل الطلب</div>
+    <div class="modal-subtitle">يرجى تعبئة جميع البيانات لإتمام الطلب</div>
+
+    <div class="order-items-summary" id="orderItemsSummary"></div>
+
+    <div class="form-group"><label class="form-label" for="ordName">الاسم الكامل *</label><input class="form-input" id="ordName" type="text" placeholder="أدخل اسمك الكامل"></div>
+    <div class="form-group"><label class="form-label" for="ordPhone">رقم الهاتف (واتساب) *</label><input class="form-input" id="ordPhone" type="tel" placeholder="07xxxxxxxxxx"></div>
+    <div class="form-group"><label class="form-label" for="ordAddr">العنوان الدقيق *</label><input class="form-input" id="ordAddr" type="text" placeholder="المحافظة / المنطقة / الشارع"></div>
+
+    <div class="form-group">
+      <label class="form-label">🚚 منطقة التوصيل *</label>
+      <select class="form-select" id="ordRegion" onchange="recalcModal()"><option value="0">اختر المنطقة...</option></select>
+      <div class="custom-select-wrap" id="customRegionWrap">
+        <div class="custom-select-trigger" id="customRegionTrigger" onclick="toggleCustomSelect()">
+          <div class="cst-icon"><i class="fa fa-map-marker-alt"></i></div>
+          <div class="cst-label">
+            <span id="cstSelectedName">اختر منطقة التوصيل</span>
+            <span class="cst-hint" id="cstSelectedHint">سيتم احتساب سعر التوصيل</span>
+          </div>
+          <div class="cst-arrow"><i class="fa fa-chevron-down"></i></div>
+        </div>
+        <div class="custom-select-dropdown" id="customRegionDropdown">
+          <div class="csd-option placeholder" onclick="selectRegionOption(0,'اختر المنطقة...','','')">
+            <div class="csd-opt-icon"><i class="fa fa-times"></i></div>
+            <span class="csd-opt-name">اختر المنطقة...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="form-label" for="ordNotes">ملاحظات إضافية</label><input class="form-input" id="ordNotes" type="text" placeholder="أي تفاصيل إضافية..."></div>
+
+    <div class="fee-row"><span>المنتجات</span><b id="mSub">0 د.ع</b></div>
+    <div class="m-disc-row" id="mDiscRow" style="display:none"><span>🏷️ خصم</span><b id="mDisc">-0 د.ع</b></div>
+    <div class="fee-row"><span>التوصيل</span><b id="mFee">0 د.ع</b></div>
+    <div class="total-row"><span>الإجمالي الكلي</span><b id="mTotal">0 د.ع</b></div>
+
+    <button class="submit-wa-btn" onclick="submitOrder()"><i class="fab fa-whatsapp"></i> إرسال الطلب عبر واتساب</button>
+    <button class="cancel-modal-btn" onclick="closeOrderModal()">إلغاء</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <div class="nav-btn active" onclick="switchTab('p-home',0)"><i class="fa fa-home"></i><span>الرئيسية</span></div>
+  <div class="nav-btn" onclick="switchTab('p-cats',1)"><i class="fa fa-th"></i><span>الفئات</span></div>
+  <div class="nav-btn" onclick="switchTab('p-reels',2)"><i class="fa fa-play-circle"></i><span>ريلز</span></div>
+  <div class="nav-btn" onclick="switchTab('p-cart',3)">
+    <div class="nav-cart-badge" id="cartCount">0</div>
+    <i class="fa fa-shopping-bag"></i><span>السلة</span>
+  </div>
+  <div class="nav-btn" onclick="switchTab('p-profile',4)"><i class="fa fa-user-circle"></i><span>حسابي</span></div>
+</nav>
+
+<div class="toast-msg" id="toast"></div>
+<div class="unlock-toast" id="unlockToast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script src="assets/store.js"></script>
+</body>
+</html>
